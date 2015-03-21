@@ -47,10 +47,10 @@ function create() {
     GameEngine.introText = game.add.text(game.world.centerX, 400, '- click to start -', { font: "40px Arial", fill: "#ffffff", align: "center" });
     GameEngine.introText.anchor.setTo(0.5, 0.5);
 
-    game.input.onDown.add(function (){
+    game.input.onDown.add(function () {
         GameEngine.releaseBall(GameEngine.ball);
     }, this);
-
+    
 }
 
 function update () {
@@ -65,4 +65,5 @@ function update () {
     // paddle.x = Game.calcPaddlePosition(paddle.x, game.input.x);
 
     GameEngine.update(game.input.x, game);
+    //game.debug.body(GameEngine.paddle); // Decommenter pour voir le body du paddle en debug
 }

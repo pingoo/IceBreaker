@@ -30,7 +30,7 @@ GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
         result = paddleX - Math.sqrt(paddleX - mouseX);
     }
     return result;
-}
+};
 
 
 GameEngine.GameOver = function () {
@@ -40,12 +40,12 @@ GameEngine.GameOver = function () {
     GameEngine.introText.text = 'Game Over!';
     GameEngine.introText.visible = true;
 
-}
+};
 
 GameEngine.addScore = function (scoreValue) {
     GameEngine.score += scoreValue;
     GameEngine.scoreText.text = "score : " + GameEngine.score;
-}
+};
 
 GameEngine.allKilled = function () {
     //  New level starts
@@ -63,7 +63,7 @@ GameEngine.allKilled = function () {
 
     //  And bring the bricks back from the dead :)
     this.bricks.callAll('revive');
-}
+};
 
 
 GameEngine.releaseBall = function (ball) {
@@ -75,7 +75,7 @@ GameEngine.releaseBall = function (ball) {
         ball.body.velocity.x = -75;
         GameEngine.introText.visible = false;
     }
-}
+};
 
 
 GameEngine.ballLost = function () {
@@ -94,13 +94,13 @@ GameEngine.ballLost = function () {
         GameEngine.ball.reset(GameEngine.paddle.body.x + 16, GameEngine.paddle.y - 16);
         
     }
-}
+};
 
 
 GameEngine.ballHitBrick = function (ballSprite, brickSprite) {
     console.log("brickSprite.life="+brickSprite.life);
     brickSprite.damage(ballSprite.damageValue); // Does not work
-}
+};
 
 
 GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
@@ -110,22 +110,26 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
     if (ballSprite.x < paddleSprite.x) {
         //  La balle tape sur le côté gauche du paddle
         diff = paddleSprite.x - ballSprite.x;
-        ballSprite.body.velocity.x = (-10 * diff);
+        ballSprite.body.velocity.x = (-5 * diff);
     } else if (ballSprite.x > paddleSprite.x) {
         //  La balle tape sur le côté droit du paddle
         diff = ballSprite.x -paddleSprite.x;
-        ballSprite.body.velocity.x = (10 * diff);
+        ballSprite.body.velocity.x = (5 * diff);
     } else {
         //  La balle tape au centre
         //  Ajout d'une velocité minimum pour éviter de la coincer
         ballSprite.body.velocity.x = 2 + Math.random() * 8;
     }
+    
+};
 
-}
 
+// Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
     var ball = GameEngine.ball;
+    GameEngine.paddle.angle = GameEngine.calcPaddleAngle(posX, GameEngine.paddle);
     GameEngine.paddle.x = posX;
+    //GameEngine.paddle.x = GameEngine.calcPaddlePosition(GameEngine.paddle.x, posX); // decommenter et commenter la ligne du dessus pour mettre un retard dans le mouvement du paddle
 
     if (GameEngine.paddle.x < 24) {
         GameEngine.paddle.x = 24;
@@ -134,11 +138,26 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
     }
 
     if (GameEngine.ballOnPaddle) {
-        ball.body.x = posX;
+        ball.body.x = GameEngine.paddle.x - 8;
     } else {
         game.physics.arcade.collide(ball, GameEngine.paddle, GameEngine.ballHitPaddle, null, this);
         
         game.physics.arcade.collide(ball, GameEngine.bricks, GameEngine.ballHitBrick, null, this);
     }
 
+};
+
+GameEngine.calcPaddleAngle = function (posX, paddle) {
+
+    var distance = posX - paddle.x;
+    var angle = paddle.angle;
+    
+    angle = distance * 3 / 2;
+    if(angle > 8) {
+        angle = 8;
+    }
+    if(angle < -8) {
+        angle = -8;
+    }
+    return angle;
 };
