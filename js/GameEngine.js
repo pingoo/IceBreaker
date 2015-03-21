@@ -1,0 +1,144 @@
+// GameEngine est une 'classe' statique et 'context' du jeu
+
+// Pas de constructeur, attribution des champs statiques
+GameEngine = {
+    currentLevel : 0,
+    lives : 3,
+    score : 0,
+    brickScore : 20,
+    ballOnPaddle : true,
+    
+    
+    paddle : null,
+    ball : null,
+    balls : null,
+    bricks : null,
+    
+    
+    scoreText : null,
+    fpsText : null,
+    livesText : null,
+    introText : null
+};
+
+
+GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
+    var result = mouseX;
+    if (mouseX > paddleX) {
+        result = paddleX + Math.sqrt(mouseX - paddleX);
+    } else if (mouseX < paddleX) {
+        result = paddleX - Math.sqrt(paddleX - mouseX);
+    }
+    return result;
+}
+
+
+GameEngine.GameOver = function () {
+
+    GameEngine.ball.body.velocity.setTo(0, 0);
+    
+    GameEngine.introText.text = 'Game Over!';
+    GameEngine.introText.visible = true;
+
+}
+
+GameEngine.addScore = function (scoreValue) {
+    GameEngine.score += scoreValue;
+    GameEngine.scoreText.text = "score : " + GameEngine.score;
+}
+
+GameEngine.allKilled = function () {
+    //  New level starts
+    GameEngine.addScore(1000);
+    GameEngine.score += 1000;
+    GameEngine.scoreText.text = 'score: ' + GameEngine.score;
+    GameEngine.introText.text = '- Next Level -';
+
+    //  Let's move the ball back to the paddle
+    GameEngine.ballOnPaddle = true;
+    this.ball.body.velocity.set(0);
+    this.ball.x = GameEngine.paddle.x + 16;
+    this.ball.y = GameEngine.paddle.y - 16;
+    this.ball.animations.stop();
+
+    //  And bring the bricks back from the dead :)
+    this.bricks.callAll('revive');
+}
+
+
+GameEngine.releaseBall = function (ball) {
+    console.log("GameEngine.paddle="+GameEngine.ballOnPaddle);
+    if (GameEngine.ballOnPaddle)
+    {
+        GameEngine.ballOnPaddle = false;
+        ball.body.velocity.y = -300;
+        ball.body.velocity.x = -75;
+        GameEngine.introText.visible = false;
+    }
+}
+
+
+GameEngine.ballLost = function () {
+
+    GameEngine.lives--;
+    GameEngine.livesText.text = 'lives: ' + GameEngine.lives;
+
+    if (GameEngine.lives === 0)
+    {
+        GameEngine.GameOver();
+    }
+    else
+    {
+        GameEngine.ballOnPaddle = true;
+
+        GameEngine.ball.reset(GameEngine.paddle.body.x + 16, GameEngine.paddle.y - 16);
+        
+    }
+}
+
+
+GameEngine.ballHitBrick = function (ballSprite, brickSprite) {
+    console.log("brickSprite.life="+brickSprite.life);
+    brickSprite.damage(ballSprite.damageValue); // Does not work
+}
+
+
+GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
+    console.log("called ballHitPaddle");
+    var diff = 0;
+
+    if (ballSprite.x < paddleSprite.x) {
+        //  La balle tape sur le côté gauche du paddle
+        diff = paddleSprite.x - ballSprite.x;
+        ballSprite.body.velocity.x = (-10 * diff);
+    } else if (ballSprite.x > paddleSprite.x) {
+        //  La balle tape sur le côté droit du paddle
+        diff = ballSprite.x -paddleSprite.x;
+        ballSprite.body.velocity.x = (10 * diff);
+    } else {
+        //  La balle tape au centre
+        //  Ajout d'une velocité minimum pour éviter de la coincer
+        ballSprite.body.velocity.x = 2 + Math.random() * 8;
+    }
+
+}
+
+GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
+    var ball = GameEngine.ball;
+    GameEngine.paddle.x = posX;
+
+    if (GameEngine.paddle.x < 24) {
+        GameEngine.paddle.x = 24;
+    } else if (GameEngine.paddle.x > game.width - 24) {
+        GameEngine.paddle.x = game.width - 24;
+    }
+
+    if (GameEngine.ballOnPaddle) {
+        ball.body.x = posX;
+    } else {
+        game.physics.arcade.collide(ball, GameEngine.paddle, GameEngine.ballHitPaddle, null, this);
+        
+        game.physics.arcade.collide(ball, GameEngine.bricks, GameEngine.ballHitBrick, null, this);
+    }
+
+};
