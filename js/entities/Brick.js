@@ -17,7 +17,7 @@ function Brick(game, posX, posY, spriteName, scoreValue) {      // Définition d
 };
 
 
-// Extend de la classe sprite pour les bricks
+// Extend de la classe Sprite pour les bricks
 Brick.prototype = Object.create(Phaser.Sprite.prototype);
 Brick.prototype.constructor = Brick;
 
@@ -37,6 +37,6 @@ Brick.prototype.killBrick = function() { // Déclaration d'une fonction de dést
 
     //  Reste t'il des briques ?
     if (GameEngine.bricks.countLiving() == 0) {
-        GameEngine.allKilled();  // Appel  de la fonction pour signifier au jeu que toutes les bricques sont détruites
+        GameEngine.allKilled();  // Appel  de la fonction pour signifier au jeu que toutes les briques sont détruites
     }
 };

@@ -18,6 +18,6 @@ function Paddle(game, posX, posY, spriteName) {        // Définition du constru
 };
 
 
-// Extend de la classe sprite pour le paddle
+// Extend de la classe Sprite pour le paddle
 Paddle.prototype = Object.create(Phaser.Sprite.prototype);
 Paddle.prototype.constructor = Paddle;
