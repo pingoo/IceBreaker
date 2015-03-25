@@ -17,14 +17,18 @@ and open the template in the editor.
         </div>
         <script src="./js/lib/phaser.js"></script>
         
-        <script src="./js/GameEngine.js"></script>
+        <script src="./js/Texts.js"></script>
+        
+        <script src="./js/contexts/GameEngine.js"></script>
+        <script src="./js/contexts/MenuScreenContext.js"></script>
         
         <script src="./js/entities/Ball.js"></script>
         <script src="./js/entities/Brick.js"></script>
         <script src="./js/entities/Paddle.js"></script>
         
-        
+        <!-- On charge d'abord l'écran de menu pour instancier l'objet Phaser.Game -->
+        <script src="./js/screens/MenuScreen.js"></script>
         <!-- Charger en dernier Main.js car il contient tous les autres appels -->
-        <script src="./js/Main.js"></script>
+        <script src="./js/screens/GameScreen.js"></script>
     </body>
 </html>

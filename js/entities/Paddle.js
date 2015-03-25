@@ -11,7 +11,6 @@ function Paddle(game, posX, posY, spriteName) {        // Définition du constru
     this.body.immovable = true;                       // je ne sais pas (encore)
     this.anchor.setTo(0.5, 0.5);
     this.body.collideWorldBounds = true;              // TODO : A mettre à false pour y mettre nos propres limites
-    this.body.bounce.set(1);
     this.body.immovable = true;
     
     game.add.existing(this);
