@@ -7,9 +7,9 @@ GameEngine = {
     currentLevel : 0,
     lives : 3,
     score : 0,
-    brickScore : 20,
     ballOnPaddle : true,
     
+    brickScore : 20,
     
     paddle : null,
     ball : null,
@@ -23,6 +23,12 @@ GameEngine = {
     introText : null
 };
 
+GameEngine.reset = function () {
+    this.currentLevel = 0;
+    this.lives = 3;
+    this.score = 0;
+    this.ballOnPaddle = true;
+};
 
 GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
     var result = mouseX;
@@ -41,6 +47,12 @@ GameEngine.GameOver = function () {
     
     GameEngine.introText.text = 'Game Over!';
     GameEngine.introText.visible = true;
+    
+    var timerDead = GameEngine.game.time.create(true);
+    timerDead.add(2000, function() {
+        game.state.start("default");
+    }, this);
+    timerDead.start();
 
 };
 
