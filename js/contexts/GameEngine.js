@@ -8,6 +8,8 @@ GameEngine = {
     lives : 3,
     score : 0,
     ballOnPaddle : true,
+    paused : false,
+    mouseOffScreen : false,
     
     brickScore : 20,
     
@@ -28,6 +30,8 @@ GameEngine.reset = function () {
     this.lives = 3;
     this.score = 0;
     this.ballOnPaddle = true;
+    this.paused = false;
+    this.mouseOffScreen = false;
 };
 
 GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
