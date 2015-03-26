@@ -30,5 +30,21 @@ and open the template in the editor.
         <script src="./js/screens/MenuScreen.js"></script>
         <!-- Charger en dernier Main.js car il contient tous les autres appels -->
         <script src="./js/screens/GameScreen.js"></script>
+        
+        <script>
+            window.addEventListener("click", function() {
+                gamePause();   
+            });
+            
+            document.getElementById("phaser-example").addEventListener("mouseout", function () {
+                GameEngine.mouseOffScreen = true;
+            });
+            
+            document.getElementById("phaser-example").addEventListener("mouseover", function () {
+                GameEngine.mouseOffScreen = false;
+            });
+
+        </script>
+        
     </body>
 </html>

@@ -18,11 +18,39 @@ function menuCreate() {
                                                                Texts.startGame, { font: "34px Arial", fill: "#00ff00", align: "center" });
     MenuScreenContext.startGameText.anchor.setTo(0.5, 0.5);
     
+    MenuScreenContext.loadNextScreen = false;
+    MenuScreenContext.timer = null;
+    
     game.input.onDown.add(function () {
-        game.state.start("gameState");
+        MenuScreenContext.loadNextScreen = true;
     }, this);
 }
 
 function menuUpdate() {
-    
+    if (!MenuScreenContext.loadNextScreen) {
+        if (MenuScreenContext.currentInterval < MenuScreenContext.maxInterval) {
+            MenuScreenContext.currentInterval++;
+            MenuScreenContext.startGameText.width = MenuScreenContext.startGameText.width + 2 * MenuScreenContext.blink;
+            MenuScreenContext.startGameText.height = MenuScreenContext.startGameText.height + 0.5 * MenuScreenContext.blink;
+            MenuScreenContext.startGameText.angle = MenuScreenContext.startGameText.angle + 0.15 * MenuScreenContext.blink;
+        }
+
+        if (MenuScreenContext.currentInterval >= MenuScreenContext.maxInterval) {
+            MenuScreenContext.blink = MenuScreenContext.blink * -1;
+            MenuScreenContext.currentInterval = 0;
+        }
+    } else {
+        MenuScreenContext.startGameText.angle = MenuScreenContext.startGameText.angle + 4;
+        
+        if(!MenuScreenContext.timer) {
+            var delay = 1400;
+            var onComplete = function() {
+                game.state.start("gameState");  
+            };
+
+            MenuScreenContext.timer = game.time.create();
+            MenuScreenContext.timer.add(delay, onComplete, this);
+            MenuScreenContext.timer.start();
+        }
+    }
 }

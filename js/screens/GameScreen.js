@@ -41,6 +41,10 @@ function gameCreate() {
 
     game.input.onDown.add(function () {
         GameEngine.releaseBall(GameEngine.ball);
+        if(GameEngine.paused) {
+            GameEngine.paused = false;
+            gamePause();
+        }
     }, this);
     
     // on gère la touche P pour la pause
