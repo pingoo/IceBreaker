@@ -43,6 +43,7 @@ function gameCreate() {
         GameEngine.releaseBall(GameEngine.ball);
     }, this);
     
+    GameEngine.reset();
 }
 
 function gameUpdate() {
