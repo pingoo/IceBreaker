@@ -34,9 +34,9 @@ function gameCreate() {
     
 
     GameEngine.fpsText = game.add.text(20, 20, '--', { font: "14px Arial", fill: "#00ff00", align: "left" });
-    GameEngine.scoreText = game.add.text(32, 550, 'score: 0', { font: "20px Arial", fill: "#ffffff", align: "left" });
-    GameEngine.livesText = game.add.text(680, 550, 'lives: 3', { font: "20px Arial", fill: "#ffffff", align: "left" });
-    GameEngine.introText = game.add.text(game.world.centerX, 400, '- cliquer pour lancer la balle -', { font: "40px Arial", fill: "#ffffff", align: "center" });
+    GameEngine.scoreText = game.add.text(32, 550, Texts.score + GameEngine.score, { font: "20px Arial", fill: "#ffffff", align: "left" });
+    GameEngine.livesText = game.add.text(680, 550, Texts.lives + GameEngine.lives, { font: "20px Arial", fill: "#ffffff", align: "left" });
+    GameEngine.introText = game.add.text(game.world.centerX, 400, Texts.startLevel, { font: "40px Arial", fill: "#ffffff", align: "center" });
     GameEngine.introText.anchor.setTo(0.5, 0.5);
 
     game.input.onDown.add(function () {
@@ -59,11 +59,13 @@ function gameCreate() {
 }
 
 function gamePause() {
-    // on enlève la pause ssi la souris n'est pas hors de l'écran et que l'on n'est pas en pause
-    GameEngine.paused = GameEngine.mouseOffScreen || GameEngine.paused;
-    GameEngine.introText.text = 'PAUSE !'
-    GameEngine.introText.visible = GameEngine.paused;
-    game.paused = GameEngine.paused;
+    if(GameEngine.introText) { // D'abord on s'assure que introText ne soit pas null, et donc qu'on soit sur l'écran de jeu
+        // on enlève la pause ssi la souris n'est pas hors de l'écran et que l'on n'est pas en pause
+        GameEngine.paused = GameEngine.mouseOffScreen || GameEngine.paused;
+        GameEngine.introText.text = Texts.pause;
+        GameEngine.introText.visible = GameEngine.paused;
+        game.paused = GameEngine.paused;
+    }
 }
 
 function gameUpdate() {

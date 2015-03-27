@@ -18,7 +18,6 @@ GameEngine = {
     balls : null,
     bricks : null,
     
-    
     scoreText : null,
     fpsText : null,
     livesText : null,
@@ -49,12 +48,12 @@ GameEngine.GameOver = function () {
 
     GameEngine.ball.body.velocity.setTo(0, 0);
     
-    GameEngine.introText.text = 'Game Over!';
+    GameEngine.introText.text = Texts.gameOver;
     GameEngine.introText.visible = true;
     
     var timerDead = GameEngine.game.time.create(true);
     timerDead.add(2000, function() {
-        game.state.start("default");
+        game.state.start("default"); //Défault est le nom donné par défault au game state lorsque l'on passe par la fonction create (dans MenuScreen)
     }, this);
     timerDead.start();
 
@@ -62,15 +61,15 @@ GameEngine.GameOver = function () {
 
 GameEngine.addScore = function (scoreValue) {
     GameEngine.score += scoreValue;
-    GameEngine.scoreText.text = "score : " + GameEngine.score;
+    GameEngine.scoreText.text = Texts.score + GameEngine.score;
 };
 
 GameEngine.allKilled = function () {
     //  New level starts
     GameEngine.addScore(1000);
     GameEngine.score += 1000;
-    GameEngine.scoreText.text = 'score: ' + GameEngine.score;
-    GameEngine.introText.text = '- Next Level -';
+    GameEngine.scoreText.text = Texts.score + GameEngine.score;
+    GameEngine.introText.text = Texts.nextLevel;
 
     //  Let's move the ball back to the paddle
     GameEngine.ballOnPaddle = true;
@@ -99,16 +98,12 @@ GameEngine.releaseBall = function (ball) {
 GameEngine.ballLost = function () {
 
     GameEngine.lives--;
-    GameEngine.livesText.text = 'lives: ' + GameEngine.lives;
+    GameEngine.livesText.text = Texts.lives + GameEngine.lives;
 
-    if (GameEngine.lives === 0)
-    {
+    if (GameEngine.lives === 0) {
         GameEngine.GameOver();
-    }
-    else
-    {
+    } else {
         GameEngine.ballOnPaddle = true;
-
         GameEngine.ball.reset(GameEngine.paddle.body.x + 16, GameEngine.paddle.y - 16);
         
     }
@@ -117,7 +112,7 @@ GameEngine.ballLost = function () {
 
 GameEngine.ballHitBrick = function (ballSprite, brickSprite) {
     console.log("brickSprite.life="+brickSprite.life);
-    brickSprite.damage(ballSprite.damageValue); // Does not work
+    brickSprite.damage(ballSprite.damageValue);
 };
 
 
