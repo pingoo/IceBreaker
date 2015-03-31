@@ -12,6 +12,7 @@ GameEngine = {
     mouseOffScreen : false,
     
     brickScore : 20,
+    initialVelocityY : -300,
     
     paddle : null,
     ball : null,
@@ -88,7 +89,7 @@ GameEngine.releaseBall = function (ball) {
     if (GameEngine.ballOnPaddle)
     {
         GameEngine.ballOnPaddle = false;
-        ball.body.velocity.y = -300;
+        ball.body.velocity.y = GameEngine.initialVelocityY;
         ball.body.velocity.x = -75;
         GameEngine.introText.visible = false;
     }
@@ -136,6 +137,11 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
     
 };
 
+GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
+    // On change la vélocité y de la balle
+    ballSprite.body.velocity.y = GameEngine.initialVelocityY;
+};
+
 
 // Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
@@ -156,6 +162,8 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
         game.physics.arcade.collide(ball, GameEngine.paddle, GameEngine.ballHitPaddle, null, this);
         
         game.physics.arcade.collide(ball, GameEngine.bricks, GameEngine.ballHitBrick, null, this);
+        
+        game.physics.arcade.overlap(ball, GameEngine.paddle, GameEngine.ballOverlapPaddle, null, this)
     }
 
 };

@@ -48,7 +48,7 @@ function gameCreate() {
     }, this);
     
     // on gère la touche P pour la pause
-    game.input.keyboard.onDownCallback = function(e){
+    game.input.keyboard.onDownCallback = function(e) {
         if(e.keyCode == Phaser.Keyboard.P) {
             GameEngine.paused = !GameEngine.paused;
             gamePause();
