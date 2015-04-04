@@ -5,14 +5,15 @@ var game = GameEngine.game;
 
 function menuPreload() {
 
-    game.load.image('bg', 'assets/images/background.jpg');
-    game.load.image('paddle', 'assets/images/paddle.jpg');
+    game.load.image('bgGameScreen', 'assets/images/bgGameScreen.png');
+    game.load.image('brick', 'assets/images/brick.png');
     game.load.image('ball', 'assets/images/ball.png');
-
+    game.load.image('paddle', 'assets/images/paddle.png');
+    game.load.image('bgMenuScreen', 'assets/images/bgMenuScreen.png');
 }
 
 function menuCreate() {    
-    MenuScreenContext.background = game.add.tileSprite(0, 0, 800, 600, 'bg');
+    MenuScreenContext.background = game.add.tileSprite(0, 0, 800, 600, 'bgMenuScreen');
     
     MenuScreenContext.startGameText = game.add.text(game.world.centerX, game.world.centerY,
                                                                Texts.startGame, { font: "34px Arial", fill: "#00ff00", align: "center" });

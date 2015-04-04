@@ -13,16 +13,20 @@ GameEngine = {
     
     brickScore : 20,
     initialVelocityY : -300,
+    boundX : 600,
+    
     
     paddle : null,
     ball : null,
     balls : null,
     bricks : null,
+    tweenBallRotation : null,
     
     scoreText : null,
     fpsText : null,
     livesText : null,
-    introText : null
+    introText : null,
+    debugText : null
 };
 
 GameEngine.reset = function () {
@@ -134,11 +138,10 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
         //  Ajout d'une velocité minimum pour éviter de la coincer
         ballSprite.body.velocity.x = 2 + Math.random() * 8;
     }
-    
 };
 
 GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
-    // On change la vélocité y de la balle
+    // On change la vélocité y de la balle pour qu'elle reparte vers le haut
     ballSprite.body.velocity.y = GameEngine.initialVelocityY;
 };
 
@@ -146,6 +149,9 @@ GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
 // Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
     var ball = GameEngine.ball;
+    if(posX > GameEngine.boundX - GameEngine.paddle.width / 2){
+        posX = GameEngine.boundX - GameEngine.paddle.width / 2;
+    }
     GameEngine.paddle.angle = GameEngine.calcPaddleAngle(posX, GameEngine.paddle);
     GameEngine.paddle.x = posX;
     //GameEngine.paddle.x = GameEngine.calcPaddlePosition(GameEngine.paddle.x, posX); // decommenter et commenter la ligne du dessus pour mettre un retard dans le mouvement du paddle
@@ -165,6 +171,46 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
         
         game.physics.arcade.overlap(ball, GameEngine.paddle, GameEngine.ballOverlapPaddle, null, this)
     }
+
+};
+
+GameEngine.calcBallAngleTest = function (ballSprite) {
+    // Valeurs des angles exprimées en radiants ici.
+    
+    var angle = Tools.calcAngle(ballSprite.body.velocity.x, ballSprite.body.velocity.y);
+    
+    //var angle = ballSprite.angle; // Valeur in engine, marche parfaitement.
+    
+    // Si la precedente valeur de angle est egale à la valeur de ballSprite.rotation * -1
+    // alors faire la rotation dans l'autre sens, c'est à dire forcer angle à valoir angle - 2 * Math.PI
+    
+    if (ballSprite.lastAngle == ballSprite.rotation * -1) {
+        angle = angle - 2 * Math.PI;
+        ballSprite.lastAngle = ballSprite.lastAngle - 2 * Math.PI;
+    }
+    
+    GameEngine.debugText.y = ballSprite.y;
+    GameEngine.debugText.x = ballSprite.x+10;
+    GameEngine.debugText.text = ballSprite.rotation;
+    console.log("bs="+ballSprite.rotation);
+    
+    ballSprite.lastAngle = angle;
+    
+    if(ballSprite.rotation - 0.1 > angle) {
+        ballSprite.rotation -= 0.1;
+    } else if(ballSprite.rotation + 0.1 < angle) {
+        ballSprite.rotation += 0.1;
+    }
+    
+    // tween fonctionne parfaitement
+    // GameEngine.tweenBallRotation = game.add.tween(ballSprite).to({rotation : angle}, 120, Phaser.Easing.Bounce.Out, true);
+
+};
+
+GameEngine.calcBallAngle = function (ballSprite) {
+    // Valeurs des angles exprimées en radiants ici.
+    var angle = ballSprite.body.angle; // Valeur in engine, marche parfaitement.
+    GameEngine.tweenBallRotation = game.add.tween(ballSprite).to({rotation : angle}, 90, Phaser.Easing.Bounce.Out, true);
 
 };
 

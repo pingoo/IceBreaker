@@ -10,18 +10,18 @@ function gameCreate() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  check des collision avec les bords du canvas, sauf en bas
-    // TODO : changer ce colllision check
     game.physics.arcade.checkCollision.down = false;
+    game.physics.arcade.setBounds(0, 0, GameEngine.boundX, 600);
 
-    backGroundImage = game.add.tileSprite(0, 0, 800, 600, 'bg');
+    backGroundImage = game.add.tileSprite(0, 0, 800, 600, 'bgGameScreen');
 
     // Creation d'un groupe 'bricks', tous les membres de ce groupe auront un body
     GameEngine.bricks = game.add.group();
     //GameEngine.bricks.classType = Brick; // On definit le type du groupe sur la classe étendue crée par nos soins
 
     for (var y = 0; y < 4; y++) {
-        for (var x = 0; x < 15; x++) {
-            GameEngine.bricks.add(new Brick(game, 120 + (x * 36), 100 + (y * 52), 'paddle', GameEngine.brickScore));
+        for (var x = 0; x < 11; x++) {
+            GameEngine.bricks.add(new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', GameEngine.brickScore));
         }
     }
     
@@ -33,10 +33,11 @@ function gameCreate() {
     GameEngine.ball.y = GameEngine.paddle.y - 16;
     
 
-    GameEngine.fpsText = game.add.text(20, 20, '--', { font: "14px Arial", fill: "#00ff00", align: "left" });
-    GameEngine.scoreText = game.add.text(32, 550, Texts.score + GameEngine.score, { font: "20px Arial", fill: "#ffffff", align: "left" });
-    GameEngine.livesText = game.add.text(680, 550, Texts.lives + GameEngine.lives, { font: "20px Arial", fill: "#ffffff", align: "left" });
-    GameEngine.introText = game.add.text(game.world.centerX, 400, Texts.startLevel, { font: "40px Arial", fill: "#ffffff", align: "center" });
+    GameEngine.fpsText = game.add.text(game.world.width - 40, 20, '--', { font: "14px Arial", fill: "#00ff00", align: "left" });
+    GameEngine.debugText = game.add.text(680, 60, '--', { font: "14px Arial", fill: "#00ff00", align: "left" });
+    GameEngine.scoreText = game.add.text(680, 520, Texts.score + GameEngine.score, { font: "20px Arial", fill: "#00ff00", align: "left" });
+    GameEngine.livesText = game.add.text(680, 550, Texts.lives + GameEngine.lives, { font: "20px Arial", fill: "#00ff00", align: "left" });
+    GameEngine.introText = game.add.text(game.world.centerX, 400, Texts.startLevel, { font: "40px Arial", fill: "#00ff00", align: "center" });
     GameEngine.introText.anchor.setTo(0.5, 0.5);
 
     game.input.onDown.add(function () {
@@ -81,4 +82,6 @@ function gameUpdate() {
 
     GameEngine.update(game.input.x, game);
     //game.debug.body(GameEngine.paddle); // Decommenter pour voir le body du paddle en debug
+    
+    GameEngine.calcBallAngle(GameEngine.ball);
 }

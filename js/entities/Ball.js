@@ -1,6 +1,7 @@
 // Classe représentant une balle
 function Ball(game, posX, posY, spriteName) {   // Définition du constructeur de la balle
     this.damageValue = 1; // Dégats que fait la balle en frappant une brique
+    this.lastAngle = null;
     
     Phaser.Sprite.call(this, game, posX, posY, spriteName); // Appel du super constructeur
     
