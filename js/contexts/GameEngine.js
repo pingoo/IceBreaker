@@ -228,3 +228,52 @@ GameEngine.calcPaddleAngle = function (posX, paddle) {
     }
     return angle;
 };
+
+// Calculer la rotation de la balle
+GameEngine.calcBallAngleTest2 = function (ballSprite) {
+    if (ballSprite.body.prevVelocity == null) {
+        // Initialise dans le body de la balle l'objet contenant la vélocité précédente
+        ballSprite.body.prevVelocity = {
+            x : 0,
+            y : 0
+        };
+    } else {
+        // Calculer la coordonnée Z du produit vectoriel entre les vélocités courante et précédente
+        var dotProductZ = (ballSprite.body.velocity.x * ballSprite.body.prevVelocity.y) - (ballSprite.body.prevVelocity.x * ballSprite.body.velocity.y);
+        if (Math.abs(dotProductZ) >= 0.1) {
+            // Si la vélocité a considérablement changé, récupérer son signe
+            ballSprite.body.signDotProductZ = GameEngine.sign(dotProductZ);
+        }
+        // Pour le tour suivant, remplir la vélocité précédente
+        ballSprite.body.prevVelocity.x = ballSprite.body.velocity.x;
+        ballSprite.body.prevVelocity.y = ballSprite.body.velocity.y;
+    }
+    
+    // Les angles sont exprimés en radian
+    var angleTarget = ballSprite.body.angle; // Angle cible du body
+    var angleCurrent = ballSprite.rotation; // Angle affiché par le sprite
+    var diffAngle = GameEngine.modAngle(angleCurrent - angleTarget); // Différence normalisée entre ces deux angles
+    
+    var vitesseAngulaire = 0.2; // Constante en radian/frame
+    if (Math.abs(diffAngle) < vitesseAngulaire) {
+        // Si les deux angles sont très proches, on a fini la rotation
+        ballSprite.rotation = angleTarget;
+        ballSprite.body.dotProductZ = null;
+    } else {
+        // Sinon prendre le signe du de la coordonnée Z si elle existe, ou bien le signe de la différence d'angle
+        var signDiffAngle = ballSprite.body.signDotProductZ == null ? -GameEngine.sign(diffAngle) : ballSprite.body.signDotProductZ;
+        // et l'appliquer en rotation au sprite
+        ballSprite.rotation += signDiffAngle * vitesseAngulaire;
+    }
+};
+
+// Calculer le signe d'un nombre : -1, 0, 1, NaN
+GameEngine.sign = function (x) {
+    return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
+};
+
+// Normalise un angle en radian entre -PI et PI
+GameEngine.modAngle = function (rad) {
+    return rad < -Math.PI ? rad + (2 * Math.PI) :
+        (rad > Math.PI ? rad - (2 * Math.PI) : rad);
+};

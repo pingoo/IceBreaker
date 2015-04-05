@@ -83,5 +83,5 @@ function gameUpdate() {
     GameEngine.update(game.input.x, game);
     //game.debug.body(GameEngine.paddle); // Decommenter pour voir le body du paddle en debug
     
-    GameEngine.calcBallAngle(GameEngine.ball);
+    GameEngine.calcBallAngleTest2(GameEngine.ball);
 }
