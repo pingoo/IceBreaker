@@ -2,8 +2,6 @@ var gameState = { create: gameCreate, update: gameUpdate };
 //var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', gameState);
 GameEngine.game.state.add("gameState", gameState);
 
-var backGroundImage; //TODO : à porter vers GameEngine quand on utilisera un fond d'écran
-
 function gameCreate() {
     game.time.advancedTiming = true;
 
@@ -13,7 +11,7 @@ function gameCreate() {
     game.physics.arcade.checkCollision.down = false;
     game.physics.arcade.setBounds(0, 0, GameEngine.boundX, 600);
 
-    backGroundImage = game.add.tileSprite(0, 0, 800, 600, 'bgGameScreen');
+    GameEngine.backGround = game.add.tileSprite(0, 0, 800, 600, 'bgGameScreen');
 
     // Creation d'un groupe 'bricks', tous les membres de ce groupe auront un body
     GameEngine.bricks = game.add.group();

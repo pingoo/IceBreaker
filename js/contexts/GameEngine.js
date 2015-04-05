@@ -15,7 +15,7 @@ GameEngine = {
     initialVelocityY : -300,
     boundX : 600,
     
-    
+    backGround : null,
     paddle : null,
     ball : null,
     balls : null,
@@ -47,7 +47,6 @@ GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
     }
     return result;
 };
-
 
 GameEngine.GameOver = function () {
 
@@ -87,7 +86,6 @@ GameEngine.allKilled = function () {
     this.bricks.callAll('revive');
 };
 
-
 GameEngine.releaseBall = function (ball) {
     console.log("GameEngine.paddle="+GameEngine.ballOnPaddle);
     if (GameEngine.ballOnPaddle)
@@ -98,7 +96,6 @@ GameEngine.releaseBall = function (ball) {
         GameEngine.introText.visible = false;
     }
 };
-
 
 GameEngine.ballLost = function () {
 
@@ -114,15 +111,13 @@ GameEngine.ballLost = function () {
     }
 };
 
-
 GameEngine.ballHitBrick = function (ballSprite, brickSprite) {
-    console.log("brickSprite.life="+brickSprite.life);
+    //console.log("brickSprite.life="+brickSprite.life);
     brickSprite.damage(ballSprite.damageValue);
 };
 
-
 GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
-    console.log("called ballHitPaddle");
+    //console.log("called ballHitPaddle");
     var diff = 0;
 
     if (ballSprite.x < paddleSprite.x) {
@@ -242,7 +237,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
         var dotProductZ = (ballSprite.body.velocity.x * ballSprite.body.prevVelocity.y) - (ballSprite.body.prevVelocity.x * ballSprite.body.velocity.y);
         if (Math.abs(dotProductZ) >= 0.1) {
             // Si la vélocité a considérablement changé, récupérer son signe
-            ballSprite.body.signDotProductZ = GameEngine.sign(dotProductZ);
+            ballSprite.body.signDotProductZ = Tools.sign(dotProductZ);
         }
         // Pour le tour suivant, remplir la vélocité précédente
         ballSprite.body.prevVelocity.x = ballSprite.body.velocity.x;
@@ -252,7 +247,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
     // Les angles sont exprimés en radian
     var angleTarget = ballSprite.body.angle; // Angle cible du body
     var angleCurrent = ballSprite.rotation; // Angle affiché par le sprite
-    var diffAngle = GameEngine.modAngle(angleCurrent - angleTarget); // Différence normalisée entre ces deux angles
+    var diffAngle = Tools.modAngle(angleCurrent - angleTarget); // Différence normalisée entre ces deux angles
     
     var vitesseAngulaire = 0.2; // Constante en radian/frame
     if (Math.abs(diffAngle) < vitesseAngulaire) {
@@ -261,19 +256,8 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
         ballSprite.body.dotProductZ = null;
     } else {
         // Sinon prendre le signe du de la coordonnée Z si elle existe, ou bien le signe de la différence d'angle
-        var signDiffAngle = ballSprite.body.signDotProductZ == null ? -GameEngine.sign(diffAngle) : ballSprite.body.signDotProductZ;
+        var signDiffAngle = ballSprite.body.signDotProductZ == null ? -Tools.sign(diffAngle) : ballSprite.body.signDotProductZ;
         // et l'appliquer en rotation au sprite
         ballSprite.rotation += signDiffAngle * vitesseAngulaire;
     }
-};
-
-// Calculer le signe d'un nombre : -1, 0, 1, NaN
-GameEngine.sign = function (x) {
-    return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
-};
-
-// Normalise un angle en radian entre -PI et PI
-GameEngine.modAngle = function (rad) {
-    return rad < -Math.PI ? rad + (2 * Math.PI) :
-        (rad > Math.PI ? rad - (2 * Math.PI) : rad);
 };
