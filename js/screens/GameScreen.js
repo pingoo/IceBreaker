@@ -1,5 +1,5 @@
+// Ecran principal du jeu
 var gameState = { create: gameCreate, update: gameUpdate };
-//var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', gameState);
 GameEngine.game.state.add("gameState", gameState);
 
 function gameCreate() {

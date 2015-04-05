@@ -2,7 +2,7 @@
 
 // Pas de constructeur, attribution des champs statiques
 GameEngine = {
-    game : null,
+    game : new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example'),
     
     currentLevel : 0,
     lives : 3,
@@ -44,7 +44,7 @@ GameEngine.GameOver = function () {
     
     var timerDead = GameEngine.game.time.create(true);
     timerDead.add(2000, function() {
-        game.state.start("default"); //Défault est le nom donné par défault au game state lorsque l'on passe par la fonction create (dans MenuScreen)
+        game.state.start("menuState");
     }, this);
     timerDead.start();
 

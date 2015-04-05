@@ -1,10 +1,8 @@
+// Ecran du menu
 var menuState = { preload: menuPreload, create: menuCreate, update: menuUpdate };
-GameEngine.game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', menuState);
-
-var game = GameEngine.game;
+GameEngine.game.state.add("menuState", menuState);
 
 function menuPreload() {
-
     game.load.image('bgGameScreen', 'assets/images/bgGameScreen.png');
     game.load.image('brick', 'assets/images/brick.png');
     game.load.image('ball', 'assets/images/ball.png');

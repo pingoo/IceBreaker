@@ -28,10 +28,12 @@ and open the template in the editor.
         <script src="./js/entities/Brick.js"></script>
         <script src="./js/entities/Paddle.js"></script>
         
-        <!-- On charge d'abord l'écran de menu pour instancier l'objet Phaser.Game -->
+        <!-- Changer d'abord l'écran de menu -->
         <script src="./js/screens/MenuScreen.js"></script>
-        <!-- Charger en dernier Main.js car il contient tous les autres appels -->
+        <!-- Charger l'écran de jeu -->
         <script src="./js/screens/GameScreen.js"></script>
+        <!-- Instancier l'objet Phaser.Game, tout à la fin -->
+        <script src="./js/utils/Bootstrap.js"></script>
         
         <script>
             window.addEventListener("click", function() {
