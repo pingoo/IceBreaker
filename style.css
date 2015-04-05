@@ -1,4 +1,5 @@
 #game-view {
     margin: 0 auto;
     max-width: 780px;
+    cursor: none;
 }
