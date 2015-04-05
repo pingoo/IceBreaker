@@ -36,7 +36,7 @@ Brick.prototype.killBrick = function() { // Déclaration d'une fonction de dést
     GameEngine.addScore(this.scoreValue);  // Appel  de la fonction pour augmenter le score
 
     //  Reste t'il des briques ?
-    if (GameEngine.bricks.countLiving() == 0) {
+    if (GameEngine.howManyBricksLeft() == 0) {
         GameEngine.allKilled();  // Appel  de la fonction pour signifier au jeu que toutes les briques sont détruites
     }
 };

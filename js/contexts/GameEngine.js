@@ -13,20 +13,7 @@ GameEngine = {
     
     brickScore : 20,
     initialVelocityY : -300,
-    boundX : 600,
-    
-    backGround : null,
-    paddle : null,
-    ball : null,
-    balls : null,
-    bricks : null,
-    tweenBallRotation : null,
-    
-    scoreText : null,
-    fpsText : null,
-    livesText : null,
-    introText : null,
-    debugText : null
+    boundX : 600
 };
 
 GameEngine.reset = function () {
@@ -50,10 +37,10 @@ GameEngine.calcPaddlePosition = function (paddleX, mouseX) {
 
 GameEngine.GameOver = function () {
 
-    GameEngine.ball.body.velocity.setTo(0, 0);
+    GameScreenContext.ball.body.velocity.setTo(0, 0);
     
-    GameEngine.introText.text = Texts.gameOver;
-    GameEngine.introText.visible = true;
+    GameScreenContext.introText.text = Texts.gameOver;
+    GameScreenContext.introText.visible = true;
     
     var timerDead = GameEngine.game.time.create(true);
     timerDead.add(2000, function() {
@@ -65,25 +52,25 @@ GameEngine.GameOver = function () {
 
 GameEngine.addScore = function (scoreValue) {
     GameEngine.score += scoreValue;
-    GameEngine.scoreText.text = Texts.score + GameEngine.score;
+    GameScreenContext.scoreText.text = Texts.score + GameEngine.score;
 };
 
 GameEngine.allKilled = function () {
     //  New level starts
     GameEngine.addScore(1000);
     GameEngine.score += 1000;
-    GameEngine.scoreText.text = Texts.score + GameEngine.score;
-    GameEngine.introText.text = Texts.nextLevel;
+    GameScreenContext.scoreText.text = Texts.score + GameEngine.score;
+    GameScreenContext.introText.text = Texts.nextLevel;
 
     //  Let's move the ball back to the paddle
     GameEngine.ballOnPaddle = true;
-    this.ball.body.velocity.set(0);
-    this.ball.x = GameEngine.paddle.x + 16;
-    this.ball.y = GameEngine.paddle.y - 16;
-    this.ball.animations.stop();
+    GameScreenContext.ball.body.velocity.set(0);
+    GameScreenContext.ball.x = GameScreenContext.paddle.x + 16;
+    GameScreenContext.ball.y = GameScreenContext.paddle.y - 16;
+    GameScreenContext.ball.animations.stop();
 
     //  And bring the bricks back from the dead :)
-    this.bricks.callAll('revive');
+    GameScreenContext.bricks.callAll('revive');
 };
 
 GameEngine.releaseBall = function (ball) {
@@ -93,20 +80,20 @@ GameEngine.releaseBall = function (ball) {
         GameEngine.ballOnPaddle = false;
         ball.body.velocity.y = GameEngine.initialVelocityY;
         ball.body.velocity.x = -75;
-        GameEngine.introText.visible = false;
+        GameScreenContext.introText.visible = false;
     }
 };
 
 GameEngine.ballLost = function () {
 
     GameEngine.lives--;
-    GameEngine.livesText.text = Texts.lives + GameEngine.lives;
+    GameScreenContext.livesText.text = Texts.lives + GameEngine.lives;
 
     if (GameEngine.lives === 0) {
         GameEngine.GameOver();
     } else {
         GameEngine.ballOnPaddle = true;
-        GameEngine.ball.reset(GameEngine.paddle.body.x + 16, GameEngine.paddle.y - 16);
+        GameScreenContext.ball.reset(GameScreenContext.paddle.body.x + 16, GameScreenContext.paddle.y - 16);
         
     }
 };
@@ -143,28 +130,29 @@ GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
 
 // Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
-    var ball = GameEngine.ball;
-    if(posX > GameEngine.boundX - GameEngine.paddle.width / 2){
-        posX = GameEngine.boundX - GameEngine.paddle.width / 2;
+    var ball = GameScreenContext.ball;
+    if(posX > GameEngine.boundX - GameScreenContext.paddle.width / 2){
+        posX = GameEngine.boundX - GameScreenContext.paddle.width / 2;
     }
-    GameEngine.paddle.angle = GameEngine.calcPaddleAngle(posX, GameEngine.paddle);
-    GameEngine.paddle.x = posX;
-    //GameEngine.paddle.x = GameEngine.calcPaddlePosition(GameEngine.paddle.x, posX); // decommenter et commenter la ligne du dessus pour mettre un retard dans le mouvement du paddle
+    GameScreenContext.paddle.angle = GameEngine.calcPaddleAngle(posX, GameScreenContext.paddle);
+    GameScreenContext.paddle.x = posX;
+    //GameScreenContext.paddle.x = GameEngine.calcPaddlePosition(GameScreenContext.paddle.x, posX);
+    // decommenter et commenter la ligne du dessus pour mettre un retard dans le mouvement du paddle
 
-    if (GameEngine.paddle.x < 24) {
-        GameEngine.paddle.x = 24;
-    } else if (GameEngine.paddle.x > game.width - 24) {
-        GameEngine.paddle.x = game.width - 24;
+    if (GameScreenContext.paddle.x < 24) {
+        GameScreenContext.paddle.x = 24;
+    } else if (GameScreenContext.paddle.x > game.width - 24) {
+        GameScreenContext.paddle.x = game.width - 24;
     }
 
     if (GameEngine.ballOnPaddle) {
-        ball.body.x = GameEngine.paddle.x - 8;
+        ball.body.x = GameScreenContext.paddle.x - 8;
     } else {
-        game.physics.arcade.collide(ball, GameEngine.paddle, GameEngine.ballHitPaddle, null, this);
+        game.physics.arcade.collide(ball, GameScreenContext.paddle, GameEngine.ballHitPaddle, null, this);
         
-        game.physics.arcade.collide(ball, GameEngine.bricks, GameEngine.ballHitBrick, null, this);
+        game.physics.arcade.collide(ball, GameScreenContext.bricks, GameEngine.ballHitBrick, null, this);
         
-        game.physics.arcade.overlap(ball, GameEngine.paddle, GameEngine.ballOverlapPaddle, null, this)
+        game.physics.arcade.overlap(ball, GameScreenContext.paddle, GameEngine.ballOverlapPaddle, null, this)
     }
 
 };
@@ -184,9 +172,9 @@ GameEngine.calcBallAngleTest = function (ballSprite) {
         ballSprite.lastAngle = ballSprite.lastAngle - 2 * Math.PI;
     }
     
-    GameEngine.debugText.y = ballSprite.y;
-    GameEngine.debugText.x = ballSprite.x+10;
-    GameEngine.debugText.text = ballSprite.rotation;
+    GameScreenContext.debugText.y = ballSprite.y;
+    GameScreenContext.debugText.x = ballSprite.x+10;
+    GameScreenContext.debugText.text = ballSprite.rotation;
     console.log("bs="+ballSprite.rotation);
     
     ballSprite.lastAngle = angle;
@@ -260,4 +248,8 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
         // et l'appliquer en rotation au sprite
         ballSprite.rotation += signDiffAngle * vitesseAngulaire;
     }
+};
+
+GameEngine.howManyBricksLeft = function() {
+    return GameScreenContext.bricks.countLiving();
 };
