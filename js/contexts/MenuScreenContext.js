@@ -10,5 +10,5 @@ MenuScreenContext = {
     
     blink : 1,
     currentInterval : 0,
-    maxInterval : 32
+    maxInterval : 32,
 };

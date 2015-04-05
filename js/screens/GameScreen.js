@@ -8,7 +8,7 @@ function gameCreate() {
 
     //  check des collision avec les bords du canvas, sauf en bas
     game.physics.arcade.checkCollision.down = false;
-    game.physics.arcade.setBounds(0, 0, GameEngine.boundX, 600);
+    game.physics.arcade.setBounds(0, 0, Constants.boundX, 600);
 
     GameScreenContext.backGround = game.add.tileSprite(0, 0, 800, 600, 'bgGameScreen');
 
@@ -18,7 +18,7 @@ function gameCreate() {
 
     for (var y = 0; y < 4; y++) {
         for (var x = 0; x < 11; x++) {
-            GameScreenContext.bricks.add(new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', GameEngine.brickScore));
+            GameScreenContext.bricks.add(new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', Constants.brickScore));
         }
     }
     

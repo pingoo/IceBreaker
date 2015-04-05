@@ -1,3 +1,5 @@
+// Contient tout le texte destiné à être traduit
+
 Texts = {
     startGame : "Cliquez pour commencer",
     startLevel : "Cliquez pour lancer la balle",
@@ -7,7 +9,6 @@ Texts = {
     pause : "Pause",
     
     lives : "vies: ",
-    score : "score: "
-    
+    score : "score: ",
 };
 

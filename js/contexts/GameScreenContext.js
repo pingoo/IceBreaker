@@ -13,5 +13,5 @@ GameScreenContext = {
     fpsText : null,
     livesText : null,
     introText : null,
-    debugText : null
+    debugText : null,
 };

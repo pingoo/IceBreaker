@@ -1,7 +1,7 @@
 function Brick(game, posX, posY, spriteName, scoreValue) {      // Définition du constructeur d'une brique
 
     this.life = 1;
-    this.scoreValue = GameEngine.brickScore; // Score par defaut
+    this.scoreValue = Constants.brickScore; // Score par defaut
     
     // callback functions
     this.addScore = null;

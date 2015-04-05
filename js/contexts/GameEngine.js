@@ -5,20 +5,16 @@ GameEngine = {
     game : new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example'),
     
     currentLevel : 0,
-    lives : 3,
+    lives : Constants.startingLifes,
     score : 0,
     ballOnPaddle : true,
     paused : false,
     mouseOffScreen : false,
-    
-    brickScore : 20,
-    initialVelocityY : -300,
-    boundX : 600
 };
 
 GameEngine.reset = function () {
     this.currentLevel = 0;
-    this.lives = 3;
+    this.lives = Constants.startingLifes;
     this.score = 0;
     this.ballOnPaddle = true;
     this.paused = false;
@@ -78,7 +74,7 @@ GameEngine.releaseBall = function (ball) {
     if (GameEngine.ballOnPaddle)
     {
         GameEngine.ballOnPaddle = false;
-        ball.body.velocity.y = GameEngine.initialVelocityY;
+        ball.body.velocity.y = Constants.ballInitialVelocityY;
         ball.body.velocity.x = -75;
         GameScreenContext.introText.visible = false;
     }
@@ -123,16 +119,16 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
 };
 
 GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
-    // On change la vélocité y de la balle pour qu'elle reparte vers le haut
-    ballSprite.body.velocity.y = GameEngine.initialVelocityY;
+    // On change la vélocité Y de la balle pour qu'elle reparte vers le haut
+    ballSprite.body.velocity.y = Constants.ballInitialVelocityY;
 };
 
 
 // Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
     var ball = GameScreenContext.ball;
-    if(posX > GameEngine.boundX - GameScreenContext.paddle.width / 2){
-        posX = GameEngine.boundX - GameScreenContext.paddle.width / 2;
+    if(posX > Constants.boundX - GameScreenContext.paddle.width / 2){
+        posX = Constants.boundX - GameScreenContext.paddle.width / 2;
     }
     GameScreenContext.paddle.angle = GameEngine.calcPaddleAngle(posX, GameScreenContext.paddle);
     GameScreenContext.paddle.x = posX;
@@ -216,10 +212,7 @@ GameEngine.calcPaddleAngle = function (posX, paddle) {
 GameEngine.calcBallAngleTest2 = function (ballSprite) {
     if (ballSprite.body.prevVelocity == null) {
         // Initialise dans le body de la balle l'objet contenant la vélocité précédente
-        ballSprite.body.prevVelocity = {
-            x : 0,
-            y : 0
-        };
+        ballSprite.body.prevVelocity = { x : 0, y : 0 };
     } else {
         // Calculer la coordonnée Z du produit vectoriel entre les vélocités courante et précédente
         var dotProductZ = (ballSprite.body.velocity.x * ballSprite.body.prevVelocity.y) - (ballSprite.body.prevVelocity.x * ballSprite.body.velocity.y);
@@ -237,8 +230,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
     var angleCurrent = ballSprite.rotation; // Angle affiché par le sprite
     var diffAngle = Tools.modAngle(angleCurrent - angleTarget); // Différence normalisée entre ces deux angles
     
-    var vitesseAngulaire = 0.2; // Constante en radian/frame
-    if (Math.abs(diffAngle) < vitesseAngulaire) {
+    if (Math.abs(diffAngle) < Constants.ballAngularSpeed) {
         // Si les deux angles sont très proches, on a fini la rotation
         ballSprite.rotation = angleTarget;
         ballSprite.body.dotProductZ = null;
@@ -246,7 +238,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
         // Sinon prendre le signe du de la coordonnée Z si elle existe, ou bien le signe de la différence d'angle
         var signDiffAngle = ballSprite.body.signDotProductZ == null ? -Tools.sign(diffAngle) : ballSprite.body.signDotProductZ;
         // et l'appliquer en rotation au sprite
-        ballSprite.rotation += signDiffAngle * vitesseAngulaire;
+        ballSprite.rotation += signDiffAngle * Constants.ballAngularSpeed;
     }
 };
 
