@@ -16,9 +16,12 @@ function gameCreate() {
     GameScreenContext.bricks = game.add.group();
     //GameEngine.bricks.classType = Brick; // On definit le type du groupe sur la classe étendue crée par nos soins
 
+    var tints = [ 0xFFFFFF, 0xFF0000, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF ];
     for (var y = 0; y < 4; y++) {
         for (var x = 0; x < 11; x++) {
-            GameScreenContext.bricks.add(new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', Constants.brickScore));
+            var brick = new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', Constants.brickScore);
+            brick.tint = tints[(x + y) % tints.length];
+            GameScreenContext.bricks.add(brick);
         }
     }
     
