@@ -32,4 +32,8 @@ Constants = {
     minBrickY : 20,
     maxBrickX : 540,
     maxBrickY : 460,
+    
+    actionCreate : "CREATE",
+    actionDelete : "DELETE",
+    actionUpdate : "UPDATE"
 };

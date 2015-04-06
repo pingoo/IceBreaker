@@ -27,7 +27,7 @@ function menuCreate() {
         game.state.start("levelEditorState");
     };
     
-    new Button(game, Texts.startGame, 400, 200, buttonStartGameOnClick);
+    new Button(game, Texts.startGame, 400, 200, 1, 'button', buttonStartGameOnClick);
     
-    new Button(game, Texts.levelEditor, 400, 320, buttonLevelEditorOnClick);
+    new Button(game, Texts.levelEditor, 400, 320, 1, 'button', buttonLevelEditorOnClick);
 }

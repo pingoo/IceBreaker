@@ -4,7 +4,8 @@
 LevelEditorScreenContext = {
     backGround : null,
     bricks : null,
+    updateButtons : null,
 
-    fpsText : null,
-    debugText : null,
+    positionText : null,
+    actionText : null,
 };
