@@ -29,7 +29,7 @@ function gameCreate() {
     
     GameScreenContext.ball = new Ball(game, game.world.centerX, game.world.centerY, 'ball');
     
-    GameScreenContext.paddle = new Paddle(game, game.world.centerX, 500, 'paddle');
+    GameScreenContext.paddle = new Paddle(game, game.world.centerX, Constants.paddleX, 'paddle');
     
     // on définit la position de la balle sur le paddle
     GameScreenContext.ball.y = GameScreenContext.paddle.y - 16;

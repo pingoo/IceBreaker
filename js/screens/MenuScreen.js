@@ -24,10 +24,10 @@ function menuCreate() {
     };
     
     var buttonLevelEditorOnClick = function() {
-        game.state.start("gameState");
+        game.state.start("levelEditorState");
     };
     
-    MenuScreenContext.newgaeButton = new Button(game, Texts.startGame, 400, 200, buttonStartGameOnClick);
+    new Button(game, Texts.startGame, 400, 200, buttonStartGameOnClick);
     
-    MenuScreenContext.newgaeButton = new Button(game, Texts.levelEditor, 400, 320, buttonLevelEditorOnClick);
+    new Button(game, Texts.levelEditor, 400, 320, buttonLevelEditorOnClick);
 }

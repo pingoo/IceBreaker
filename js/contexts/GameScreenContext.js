@@ -1,4 +1,4 @@
-// GameScreenContext est un objet statique qui sert de contexte au menu
+// GameScreenContext est un objet statique qui sert de contexte au jeu
 
 // Pas de constructeur, attribution des champs statiques
 GameScreenContext = {

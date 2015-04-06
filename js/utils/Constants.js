@@ -2,6 +2,9 @@
 
 Constants = {
     
+    ///// Paddle /////
+    paddleX : 540,
+    
     ///// Briques /////
     
     // Score à ajouter à chaque destruction
@@ -20,4 +23,13 @@ Constants = {
     boundX : 600,
     // Nombres de vies de départ
     startingLifes : 3,
+    
+    
+    ///// Editeur de niveaux /////
+    
+    //Limites des bricks dans l'écran de jeu
+    minBrickX : 20,
+    minBrickY : 20,
+    maxBrickX : 540,
+    maxBrickY : 460,
 };
