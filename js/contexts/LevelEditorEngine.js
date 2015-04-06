@@ -1,7 +1,9 @@
-// GameEngine est une 'classe' statique et 'context' du jeu
+// GameEngine est une "classe" statique et "context" du jeu
 
 // Pas de constructeur, attribution des champs statiques
-LevelEditorEngine = {};
+LevelEditorEngine = {
+    save : null
+};
 
 LevelEditorEngine.brickAction = function (game, posX, posY) {
     // creation de brique
@@ -12,7 +14,7 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
         LevelEditorScreenContext.actionText.text = Texts.createBrick;
         LevelEditorScreenContext.positionText.text = "x:" + posX + "  y:" + posY;
         LevelEditorScreenContext.positionText.x = LevelEditorScreenContext.actionText.x + LevelEditorScreenContext.actionText.width + 10;
-        var brick = new Brick(game, posX, posY, 'brick', 20); //TODO : update from selected brick
+        var brick = new Brick(game, posX, posY, "brick", 20); //TODO : update from selected brick
         LevelEditorScreenContext.bricks.add(brick);
         LevelEditorScreenContext.currentBrick = brick;
     } 
@@ -84,15 +86,6 @@ LevelEditorEngine.updateBrick = function () {
 };
 
 
-
-// Sauvegarde du niveau
-LevelEditorEngine.saveMap = function() {
-    for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
-        var currentBrick = LevelEditorScreenContext.bricks.children[i];
-        
-    }
-}
-
 // Retour au menu
 LevelEditorEngine.backToMenuScreen = function() {
     game.state.start("menuState");
@@ -162,3 +155,72 @@ LevelEditorEngine.fiveBottom = function () {
 LevelEditorEngine.oneBottom = function () {
     LevelEditorEngine.updatePosition(0, 1);
 };
+
+
+
+
+
+
+
+// Sauvegarde du niveau //
+LevelEditorEngine.saveMap = function() {
+    var aSave = [];
+    for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
+        var currentBrick = LevelEditorScreenContext.bricks.children[i];
+        aSave.push({x : currentBrick.x, y : currentBrick .y});
+    }
+    LevelEditorEngine.save = aSave;
+    console.log(JSON.stringify(LevelEditorEngine.save));
+    
+    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+    window.webkitStorageInfo.requestQuota(PERSISTENT, 5*1024*1024, function(grantedBytes) {
+        window.requestFileSystem(PERSISTENT, grantedBytes, onInitFileSytem, errorHandler);
+    }, function(e) {
+        console.log('Error', e);
+    });
+}
+
+function onInitFileSytem (fileSystem) {
+    console.log("Opened file system: " + fileSystem.name);
+    fileSystem.root.getDirectory("data", {create: true}, onGetDirectory);
+}
+
+function onGetDirectory(dirEntry) {
+    dirEntry.getFile('map1.json', {create: true, exclusive: true}, onGetFile);
+}
+
+function onGetFile (fileEntry) {
+    fileEntry.createWriter(onWriterReady, errorHandler);
+}
+
+function onWriterReady (fileWriter){
+    var blob = new Blob(LevelEditorEngine.save, {type: "application/json"});
+    fileWriter.write(blob);
+}
+
+function errorHandler(e) {
+  var msg = "";
+
+  switch (e.code) {
+    case FileError.QUOTA_EXCEEDED_ERR:
+      msg = "QUOTA_EXCEEDED_ERR";
+      break;
+    case FileError.NOT_FOUND_ERR:
+      msg = "NOT_FOUND_ERR";
+      break;
+    case FileError.SECURITY_ERR:
+      msg = "SECURITY_ERR";
+      break;
+    case FileError.INVALID_MODIFICATION_ERR:
+      msg = "INVALID_MODIFICATION_ERR";
+      break;
+    case FileError.INVALID_STATE_ERR:
+      msg = "INVALID_STATE_ERR";
+      break;
+    default:
+      msg = "Unknown Error";
+      break;
+  };
+
+  console.log("Error: " + msg);
+}
