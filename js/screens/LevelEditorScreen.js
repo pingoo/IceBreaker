@@ -30,6 +30,10 @@ function levelEditorCreate() {
     
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
     
+    new Button(game, Texts.saveMap, 700, 510, 0.5, 'button', LevelEditorEngine.saveMap);
+    
+    new Button(game, Texts.backToMenu, 700, 560, 0.5, 'button', LevelEditorEngine.backToMenuScreen);
+    
     //Boutons d'edition de position
     var buttonFiveTop = new Button(game, Texts.five, 680, 200, 0.2, 'button', LevelEditorEngine.fiveTop);
     var buttonOneTop = new Button(game, Texts.one, 720, 200, 0.2, 'button', LevelEditorEngine.oneTop);

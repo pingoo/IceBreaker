@@ -99,6 +99,10 @@ LevelEditorEngine.saveMap = function() {
 
 }
 
+// Retour au menu
+LevelEditorEngine.backToMenuScreen = function() {
+    game.state.start("menuState");
+}
 
 
 // Edition de la position
