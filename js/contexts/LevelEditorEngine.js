@@ -28,10 +28,9 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
         LevelEditorScreenContext.bricks.add(brick);
         LevelEditorEngine.currentBrick = brick;
     } 
-
+console.log(LevelEditorEngine.currentAction);
     // supression de brique
     if(LevelEditorEngine.currentAction === Constants.actionDelete){
-        LevelEditorScreenContext.positionText.text = "";
         var brick = null;
         for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
           var currentBrick = LevelEditorScreenContext.bricks.children[i];
@@ -78,7 +77,9 @@ LevelEditorEngine.createBrick = function () {
 };
 
 LevelEditorEngine.deleteBrick = function () {
+    LevelEditorEngine.currentAction = Constants.actionDelete;
     LevelEditorScreenContext.actionText.text = Texts.deleteBrick;
+    LevelEditorScreenContext.positionText.text = "";
     for (var i = 0, len = LevelEditorScreenContext.updateButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.updateButtons[i];
         currentButton.setVisible(false);
