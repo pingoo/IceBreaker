@@ -4,11 +4,4 @@
 MenuScreenContext = {
     startGameText : null,
     background : null,
-    
-    loadNextScreen : false,
-    timer : null,
-    
-    blink : 1,
-    currentInterval : 0,
-    maxInterval : 32,
 };
