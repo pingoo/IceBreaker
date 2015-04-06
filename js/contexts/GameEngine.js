@@ -70,7 +70,7 @@ GameEngine.allKilled = function () {
 };
 
 GameEngine.releaseBall = function (ball) {
-    console.log("GameEngine.paddle="+GameEngine.ballOnPaddle);
+    //console.log("GameEngine.paddle="+GameEngine.ballOnPaddle);
     if (GameEngine.ballOnPaddle)
     {
         GameEngine.ballOnPaddle = false;
@@ -127,19 +127,16 @@ GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
 // Methode d'update principale
 GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mouvement du paddle
     var ball = GameScreenContext.ball;
-    if(posX > Constants.boundX - GameScreenContext.paddle.width / 2){
-        posX = Constants.boundX - GameScreenContext.paddle.width / 2;
-    }
+    
+    // TODO : pourquoi 2 checks sur les limites horizontales du paddle ?
+    var halfWidthPaddle = GameScreenContext.paddle.width / 2;
+    posX = Phaser.Math.clamp(posX, halfWidthPaddle, Constants.boundX - halfWidthPaddle);
     GameScreenContext.paddle.angle = GameEngine.calcPaddleAngle(posX, GameScreenContext.paddle);
     GameScreenContext.paddle.x = posX;
     //GameScreenContext.paddle.x = GameEngine.calcPaddlePosition(GameScreenContext.paddle.x, posX);
     // decommenter et commenter la ligne du dessus pour mettre un retard dans le mouvement du paddle
 
-    if (GameScreenContext.paddle.x < 24) {
-        GameScreenContext.paddle.x = 24;
-    } else if (GameScreenContext.paddle.x > game.width - 24) {
-        GameScreenContext.paddle.x = game.width - 24;
-    }
+    GameScreenContext.paddle.x = Phaser.Math.clamp(GameScreenContext.paddle.x, 24, game.width - 24);
 
     if (GameEngine.ballOnPaddle) {
         ball.body.x = GameScreenContext.paddle.x - 8;
@@ -228,7 +225,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
     // Les angles sont exprimés en radian
     var angleTarget = ballSprite.body.angle; // Angle cible du body
     var angleCurrent = ballSprite.rotation; // Angle affiché par le sprite
-    var diffAngle = Tools.modAngle(angleCurrent - angleTarget); // Différence normalisée entre ces deux angles
+    var diffAngle = Phaser.Math.wrapAngle(angleCurrent - angleTarget, true); // Différence normalisée [-PI, PI] entre ces deux angles
     
     if (Math.abs(diffAngle) < Constants.ballAngularSpeed) {
         // Si les deux angles sont très proches, on a fini la rotation

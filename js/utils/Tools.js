@@ -11,9 +11,3 @@ Tools.calcAngle = function (velocityX, velocityY) {
 Tools.sign = function (x) {
     return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
 };
-
-// Normalise un angle en radian entre -PI et PI
-Tools.modAngle = function (rad) {
-    return rad < -Math.PI ? rad + (2 * Math.PI) :
-        (rad > Math.PI ? rad - (2 * Math.PI) : rad);
-};

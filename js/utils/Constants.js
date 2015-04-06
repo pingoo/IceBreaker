@@ -3,7 +3,7 @@
 Constants = {
     
     ///// Paddle /////
-    paddleX : 540,
+    paddleStartY : 540,
     
     ///// Briques /////
     
