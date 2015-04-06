@@ -6,18 +6,9 @@ LevelEditorEngine = {};
 LevelEditorEngine.brickAction = function (game, posX, posY) {
     // creation de brique
     if(LevelEditorScreenContext.currentAction === Constants.actionCreate){
-        if (posX < Constants.minBrickX) {
-            posX = Constants.minBrickX;
-        }
-        if(posX > Constants.maxBrickX) {
-            posX = Constants.maxBrickX
-        }
-        if(posY < Constants.minBrickY) {
-            posY = Constants.minBrickY;
-        }
-        if(posY > Constants.maxBrickY) {
-            posY = Constants.maxBrickY;
-        }
+        var newBrickPos = LevelEditorEngine.getInboudsPos(posX, posY);
+        posX = newBrickPos.x;
+        posY = newBrickPos.y;
         LevelEditorScreenContext.actionText.text = Texts.createBrick;
         LevelEditorScreenContext.positionText.text = "x:" + posX + "  y:" + posY;
         LevelEditorScreenContext.positionText.x = LevelEditorScreenContext.actionText.x + LevelEditorScreenContext.actionText.width + 10;
@@ -96,7 +87,10 @@ LevelEditorEngine.updateBrick = function () {
 
 // Sauvegarde du niveau
 LevelEditorEngine.saveMap = function() {
-
+    for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
+        var currentBrick = LevelEditorScreenContext.bricks.children[i];
+        
+    }
 }
 
 // Retour au menu
@@ -105,11 +99,31 @@ LevelEditorEngine.backToMenuScreen = function() {
 }
 
 
+//Normalize la position de la brique
+LevelEditorEngine.getInboudsPos = function(posX, posY) {
+    if (posX < Constants.minBrickX) {
+        posX = Constants.minBrickX;
+    }
+    if(posX > Constants.maxBrickX) {
+        posX = Constants.maxBrickX
+    }
+    if(posY < Constants.minBrickY) {
+        posY = Constants.minBrickY;
+    }
+    if(posY > Constants.maxBrickY) {
+        posY = Constants.maxBrickY;
+    }
+    return { x : posX, y : posY};
+}
+
 // Edition de la position
 LevelEditorEngine.updatePosition = function(moveX, moveY) {
     if(LevelEditorScreenContext.currentBrick) {
-        LevelEditorScreenContext.currentBrick.x +=  moveX;
-        LevelEditorScreenContext.currentBrick.y +=  moveY;     
+        var newPosX = LevelEditorScreenContext.currentBrick.x + moveX;
+        var newPosY = LevelEditorScreenContext.currentBrick.y + moveY;
+        var newBrickPos = LevelEditorEngine.getInboudsPos(newPosX, newPosY);
+        LevelEditorScreenContext.currentBrick.x =  newBrickPos.x;
+        LevelEditorScreenContext.currentBrick.y =  newBrickPos.y;
         
         // ecrire les coordonnees
         LevelEditorScreenContext.actionText.text = Texts.updateBrick;
@@ -118,33 +132,33 @@ LevelEditorEngine.updatePosition = function(moveX, moveY) {
 }
 
 LevelEditorEngine.fiveTop = function () {
-    LevelEditorEngine.updatePosition(null, -5);
+    LevelEditorEngine.updatePosition(0, -5);
 };
 
 LevelEditorEngine.oneTop = function () {
-    LevelEditorEngine.updatePosition(null, -1);
+    LevelEditorEngine.updatePosition(0, -1);
 };
 
 LevelEditorEngine.fiveLeft = function () {
-    LevelEditorEngine.updatePosition(-5, null);
+    LevelEditorEngine.updatePosition(-5, 0);
 };
 
 LevelEditorEngine.oneLeft = function () {
-    LevelEditorEngine.updatePosition(-1, null);
+    LevelEditorEngine.updatePosition(-1, 0);
 };
 
 LevelEditorEngine.fiveRight = function () {
-    LevelEditorEngine.updatePosition(5, null);
+    LevelEditorEngine.updatePosition(5, 0);
 };
 
 LevelEditorEngine.oneRight = function () {
-    LevelEditorEngine.updatePosition(1, null);
+    LevelEditorEngine.updatePosition(1, 0);
 };
 
 LevelEditorEngine.fiveBottom = function () {
-    LevelEditorEngine.updatePosition(null, 5);
+    LevelEditorEngine.updatePosition(0, 5);
 };
 
 LevelEditorEngine.oneBottom = function () {
-    LevelEditorEngine.updatePosition(null, 1);
+    LevelEditorEngine.updatePosition(0, 1);
 };
