@@ -3,6 +3,8 @@ var gameState = { create: gameCreate, update: gameUpdate };
 GameEngine.game.state.add("gameState", gameState);
 
 function gameCreate() {
+    document.getElementById("game-view").style.cursor = "none";
+    
     game.time.advancedTiming = true;
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
