@@ -8,4 +8,7 @@ LevelEditorScreenContext = {
 
     positionText : null,
     actionText : null,
+    
+    currentAction : null,
+    currentBrick : null
 };
