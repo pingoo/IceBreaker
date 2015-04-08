@@ -164,12 +164,13 @@ LevelEditorEngine.oneBottom = function () {
 
 // Sauvegarde du niveau //
 LevelEditorEngine.saveMap = function() {
-    var aSave = [];
+    var aBricks = [];
     for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
         var currentBrick = LevelEditorScreenContext.bricks.children[i];
-        aSave.push({x : currentBrick.x, y : currentBrick .y});
+        aBricks.push({x : currentBrick.x, y : currentBrick .y});
     }
-    LevelEditorEngine.save = aSave;
+    LevelEditorEngine.save = {};
+    LevelEditorEngine.save.bricks = aBricks;
     console.log(JSON.stringify(LevelEditorEngine.save));
     
     window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
