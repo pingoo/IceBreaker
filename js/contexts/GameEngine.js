@@ -145,7 +145,7 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
         
         game.physics.arcade.collide(ball, GameScreenContext.bricks, GameEngine.ballHitBrick, null, this);
         
-        game.physics.arcade.overlap(ball, GameScreenContext.paddle, GameEngine.ballOverlapPaddle, null, this)
+        game.physics.arcade.overlap(ball, GameScreenContext.paddle, GameEngine.ballOverlapPaddle, null, this);
     }
 
 };
@@ -230,7 +230,7 @@ GameEngine.calcBallAngleTest2 = function (ballSprite) {
     if (Math.abs(diffAngle) < Constants.ballAngularSpeed) {
         // Si les deux angles sont très proches, on a fini la rotation
         ballSprite.rotation = angleTarget;
-        ballSprite.body.dotProductZ = null;
+        ballSprite.body.signDotProductZ = null;
     } else {
         // Sinon prendre le signe du de la coordonnée Z si elle existe, ou bien le signe de la différence d'angle
         var signDiffAngle = ballSprite.body.signDotProductZ == null ? -Tools.sign(diffAngle) : ballSprite.body.signDotProductZ;
