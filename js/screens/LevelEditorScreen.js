@@ -15,7 +15,7 @@ function levelEditorCreate() {
     
     LevelEditorScreenContext.ball = new Ball(game, game.world.centerX, game.world.centerY, 'ball');
     
-    LevelEditorScreenContext.paddle = new Paddle(game, game.world.centerX, Constants.paddleX, 'paddle');
+    LevelEditorScreenContext.paddle = new Paddle(game, game.world.centerX, Constants.paddleStartY, 'paddle');
     
     // on définit la position de la balle sur le paddle
     LevelEditorScreenContext.ball.y = LevelEditorScreenContext.paddle.y - 16;
