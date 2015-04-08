@@ -109,12 +109,18 @@ LevelEditorEngine.getInboudsPos = function(posX, posY) {
     return { x : posX, y : posY};
 }
 
-// Edition de la position
+
+// Deplacement de la position
 LevelEditorEngine.updatePosition = function(moveX, moveY) {
+    var newPosX = LevelEditorScreenContext.currentBrick.x + moveX;
+    var newPosY = LevelEditorScreenContext.currentBrick.y + moveY;
+    LevelEditorEngine.moveBrickTo(newPosX, newPosY);
+}
+
+// Changement de la position
+LevelEditorEngine.moveBrickTo = function (posX, posY) {
     if(LevelEditorScreenContext.currentBrick) {
-        var newPosX = LevelEditorScreenContext.currentBrick.x + moveX;
-        var newPosY = LevelEditorScreenContext.currentBrick.y + moveY;
-        var newBrickPos = LevelEditorEngine.getInboudsPos(newPosX, newPosY);
+        var newBrickPos = LevelEditorEngine.getInboudsPos(posX, posY);
         LevelEditorScreenContext.currentBrick.x =  newBrickPos.x;
         LevelEditorScreenContext.currentBrick.y =  newBrickPos.y;
         
@@ -123,6 +129,7 @@ LevelEditorEngine.updatePosition = function(moveX, moveY) {
         LevelEditorScreenContext.positionText.text = "x:" + LevelEditorScreenContext.currentBrick.x + "  y:" + LevelEditorScreenContext.currentBrick.y;
     }
 }
+
 
 LevelEditorEngine.fiveTop = function () {
     LevelEditorEngine.updatePosition(0, -5);

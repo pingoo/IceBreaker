@@ -67,8 +67,17 @@ function levelEditorCreate() {
             LevelEditorEngine.brickAction(game, game.input.x, game.input.y);
         }
     }, this);
+    
+    game.input.onHold.add(function () {
+
+    }, this);
 }
 
 function levelEditorUpdate() {
-
+    // Plutot que onHold qui ne fonctionne pas, j'utilise ce boolean
+    if (game.input.activePointer.isDown) {
+        if(game.input.x < Constants.boundX && LevelEditorScreenContext.currentAction === Constants.actionUpdate){
+            LevelEditorEngine.moveBrickTo(game.input.x, game.input.y);
+        }
+    }
 }
