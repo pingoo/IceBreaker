@@ -97,6 +97,7 @@ GameEngine.ballLost = function () {
 GameEngine.ballHitBrick = function (ballSprite, brickSprite) {
     //console.log("brickSprite.life="+brickSprite.life);
     brickSprite.damage(ballSprite.damageValue);
+    GameEngine.showImpact(ballSprite);
 };
 
 GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
@@ -116,11 +117,40 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
         //  Ajout d'une velocité minimum pour éviter de la coincer
         ballSprite.body.velocity.x = 2 + Math.random() * 8;
     }
+    GameEngine.showImpact(ballSprite);
 };
 
 GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
     // On change la vélocité Y de la balle pour qu'elle reparte vers le haut
     ballSprite.body.velocity.y = Constants.ballInitialVelocityY;
+    GameEngine.showImpact(ballSprite);
+};
+
+GameEngine.showImpact = function(sprite) {
+    var touchingDirection = sprite.body.touching;
+    console.log(touchingDirection);
+    if(touchingDirection.up) {
+        GameScreenContext.impact.x = sprite.x - sprite.width / 2;
+        GameScreenContext.impact.y = sprite.y - 20;
+    }
+    if(touchingDirection.down) {
+        GameScreenContext.impact.x = sprite.x - sprite.width / 2;
+        GameScreenContext.impact.y = sprite.y + 10;
+    }
+    if(touchingDirection.left) {
+        GameScreenContext.impact.x = sprite.x;
+        GameScreenContext.impact.y = sprite.y;
+    }
+    if(touchingDirection.right) {
+        GameScreenContext.impact.x = sprite.x + 10;
+        GameScreenContext.impact.y = sprite.y;
+    }
+    GameScreenContext.impact.visible = true;
+    var timer = GameEngine.game.time.create(true);
+    timer.add(110, function() {
+        GameScreenContext.impact.visible = false;
+    }, this);
+    timer.start();
 };
 
 

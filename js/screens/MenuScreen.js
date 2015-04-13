@@ -9,6 +9,7 @@ function menuPreload() {
     game.load.image('brick', 'assets/images/brick.png');
     game.load.image('ball', 'assets/images/ball.png');
     game.load.image('paddle', 'assets/images/paddle.png');
+    game.load.image('impact', 'assets/images/impact.png');
     game.load.image('bgMenuScreen', 'assets/images/bgMenuScreen.png');
     game.load.spritesheet('button', 'assets/images/button.png', 180, 90);
 }

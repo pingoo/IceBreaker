@@ -31,6 +31,9 @@ function gameCreate() {
     
     GameScreenContext.paddle = new Paddle(game, game.world.centerX, Constants.paddleStartY, 'paddle');
     
+    GameScreenContext.impact = game.add.sprite(0, 0, 'impact');
+    GameScreenContext.impact.visible = false;
+    
     // on définit la position de la balle sur le paddle
     GameScreenContext.ball.y = GameScreenContext.paddle.y - 24;
     
