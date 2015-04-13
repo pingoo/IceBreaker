@@ -175,6 +175,19 @@ LevelEditorEngine.loadMap = function() {
     initFileSystem();
 };
 
+LevelEditorEngine.loadBricks = function(e) {
+    // this.result est le résultat du chargement de la sauvegarde
+    // Pour le moment un seul niveau est enregistré à la fois dans le fichier maps.json
+    console.log(this.result);
+
+    LevelEditorScreenContext.currentAction = Constants.actionCreate;
+    var bricks = JSON.parse(this.result).bricks;
+    for(var i = 0, bricksLength = bricks.length; i < bricksLength; i++){
+        var brick = bricks[i];
+        LevelEditorEngine.brickAction(game, brick.x, brick.y);
+    }
+};
+
 
 // Sauvegarde du niveau //
 LevelEditorEngine.saveMap = function() {
@@ -209,7 +222,6 @@ function onGetDirectory(dirEntry) {
 }
 
 function onGetFile(fileEntry) {
-    console.log("operation="+LevelEditorEngine.operation);
     if(LevelEditorEngine.operation === LevelEditorEngine.operationSave){
         fileEntry.createWriter(onWriterReady, errorHandler);
     }
@@ -226,10 +238,7 @@ function onWriterReady(fileWriter) {
 
 function onFileReady(fileEntry) {
     var reader = new FileReader();
-    reader.onloadend = function(e) {
-        console.log(this.result);
-    };
-    
+    reader.onloadend = LevelEditorEngine.loadBricks;    
     reader.readAsText(fileEntry); 
 }
 
