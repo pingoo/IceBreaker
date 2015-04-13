@@ -17,6 +17,7 @@ Texts = {
     createBrick : "Ajouter",
     deleteBrick : "Supprimer",
     updateBrick : "Modifier",
+    loadMap : "Charger",
     saveMap : "Sauvegarder",
     backToMenu : "Retour au menu",
     five : "5px",

@@ -30,6 +30,8 @@ function levelEditorCreate() {
     
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
     
+    new Button(game, Texts.loadMap, 700, 460, 0.5, 'button', LevelEditorEngine.loadMap);
+    
     new Button(game, Texts.saveMap, 700, 510, 0.5, 'button', LevelEditorEngine.saveMap);
     
     new Button(game, Texts.backToMenu, 700, 560, 0.5, 'button', LevelEditorEngine.backToMenuScreen);

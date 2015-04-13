@@ -2,7 +2,11 @@
 
 // Pas de constructeur, attribution des champs statiques
 LevelEditorEngine = {
-    save : null
+    save : null,
+    operation : null,
+    
+    operationLoad : "LOAD",
+    operationSave : "SAVE"
 };
 
 LevelEditorEngine.brickAction = function (game, posX, posY) {
@@ -165,12 +169,16 @@ LevelEditorEngine.oneBottom = function () {
 
 
 
-
-
+// Chargement du niveau //
+LevelEditorEngine.loadMap = function() {
+    LevelEditorEngine.operation = LevelEditorEngine.operationLoad;
+    initFileSystem();
+};
 
 
 // Sauvegarde du niveau //
 LevelEditorEngine.saveMap = function() {
+    LevelEditorEngine.operation = LevelEditorEngine.operationSave;
     var aBricks = [];
     for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
         var currentBrick = LevelEditorScreenContext.bricks.children[i];
@@ -179,7 +187,10 @@ LevelEditorEngine.saveMap = function() {
     LevelEditorEngine.save = {};
     LevelEditorEngine.save.bricks = aBricks;
     console.log(JSON.stringify(LevelEditorEngine.save));
-    
+    initFileSystem();
+};
+
+function initFileSystem() {
     window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
     window.webkitStorageInfo.requestQuota(PERSISTENT, 5*1024*1024, function(grantedBytes) {
         window.requestFileSystem(PERSISTENT, grantedBytes, onInitFileSytem, errorHandler);
@@ -188,22 +199,38 @@ LevelEditorEngine.saveMap = function() {
     });
 }
 
-function onInitFileSytem (fileSystem) {
+function onInitFileSytem(fileSystem) {
     console.log("Opened file system: " + fileSystem.name);
     fileSystem.root.getDirectory("data", {create: true}, onGetDirectory);
 }
 
 function onGetDirectory(dirEntry) {
-    dirEntry.getFile('map1.json', {create: true, exclusive: true}, onGetFile);
+    dirEntry.getFile('maps.json', {create: true}, onGetFile);
 }
 
-function onGetFile (fileEntry) {
-    fileEntry.createWriter(onWriterReady, errorHandler);
+function onGetFile(fileEntry) {
+    console.log("operation="+LevelEditorEngine.operation);
+    if(LevelEditorEngine.operation === LevelEditorEngine.operationSave){
+        fileEntry.createWriter(onWriterReady, errorHandler);
+    }
+    
+    if(LevelEditorEngine.operation === LevelEditorEngine.operationLoad){
+        fileEntry.file(onFileReady, errorHandler);
+    }
 }
 
-function onWriterReady (fileWriter){
-    var blob = new Blob(LevelEditorEngine.save, {type: "application/json"});
+function onWriterReady(fileWriter) {
+    var blob = new Blob([JSON.stringify(LevelEditorEngine.save)], {type: "application/json"});
     fileWriter.write(blob);
+}
+
+function onFileReady(fileEntry) {
+    var reader = new FileReader();
+    reader.onloadend = function(e) {
+        console.log(this.result);
+    };
+    
+    reader.readAsText(fileEntry); 
 }
 
 function errorHandler(e) {

@@ -32,7 +32,7 @@ function gameCreate() {
     GameScreenContext.paddle = new Paddle(game, game.world.centerX, Constants.paddleStartY, 'paddle');
     
     // on définit la position de la balle sur le paddle
-    GameScreenContext.ball.y = GameScreenContext.paddle.y - 16;
+    GameScreenContext.ball.y = GameScreenContext.paddle.y - 24;
     
 
     GameScreenContext.fpsText = game.add.text(game.world.width - 40, 20, '--', { font: "14px Arial", fill: "#00ff00", align: "left" });
