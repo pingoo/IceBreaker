@@ -30,9 +30,12 @@ function levelEditorCreate() {
     
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
     
-    new Button(game, Texts.loadMap, 700, 460, 0.5, 'button', LevelEditorEngine.loadMap);
+    //Boutons gestion
+    new Button(game, Texts.addLevel, 700, 410, 0.5, 'button', LevelEditorEngine.addNewLevel);
     
-    new Button(game, Texts.saveMap, 700, 510, 0.5, 'button', LevelEditorEngine.saveMap);
+    new Button(game, Texts.loadLevels, 700, 460, 0.5, 'button', LevelEditorEngine.loadLevels);
+    
+    new Button(game, Texts.saveLevels, 700, 510, 0.5, 'button', LevelEditorEngine.saveLevels);
     
     new Button(game, Texts.backToMenu, 700, 560, 0.5, 'button', LevelEditorEngine.backToMenuScreen);
     
@@ -68,6 +71,9 @@ function levelEditorCreate() {
             LevelEditorEngine.brickAction(game, game.input.x, game.input.y);
         }
     }, this);
+    
+    // A l'ouverture de l'éditeur on crée la structure de niveau
+    LevelEditorEngine.instanciateLevels();
 }
 
 function levelEditorUpdate() {

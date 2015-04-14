@@ -188,9 +188,44 @@ LevelEditorEngine.oneBottom = function () {
 };
 
 
+// préparation de la structure des niveaux
+LevelEditorEngine.instanciateLevels = function() {
+    if(!LevelEditorScreenContext.levels) {
+        LevelEditorScreenContext.levels = [];
+    }
+    LevelEditorEngine.addLevel("Premier niveau");
+};
+
+// Ajout d'un niveau
+LevelEditorEngine.addNewLevel = function() {
+    var name = window.prompt(Texts.newLevelTitle, Texts.newLevelText);
+    LevelEditorEngine.addLevel(name);
+};
+
+
+LevelEditorEngine.addLevel = function(name) {
+    LevelEditorScreenContext.currentLevel = {};
+    LevelEditorScreenContext.currentLevel.name = name;
+    LevelEditorScreenContext.levels.push(LevelEditorScreenContext.currentLevel);
+    LevelEditorEngine.addLevelButtonSelector();
+};
+
+// Crée un bouton pour sélectionner le niveau
+LevelEditorEngine.addLevelButtonSelector = function() {
+    var levelNumber = LevelEditorScreenContext.levels.length;
+    new Button(game, "-" + levelNumber + "-", 600 + 34 * levelNumber, 320, 0.2, 'button', function(){
+        LevelEditorEngine.selectLevel(levelNumber);
+    });
+    LevelEditorEngine.selectLevel(levelNumber);
+}
+
+// Action du click depuis un bouton sur le niveau choisi
+LevelEditorEngine.selectLevel = function(levelNumber) {
+    LevelEditorScreenContext.levelIndex = levelNumber - 1;
+}
 
 // Chargement du niveau //
-LevelEditorEngine.loadMap = function() {
+LevelEditorEngine.loadLevels = function() {
     LevelEditorEngine.operation = LevelEditorEngine.operationLoad;
     initFileSystem();
 };
@@ -213,7 +248,7 @@ LevelEditorEngine.loadBricks = function(e) {
 
 
 // Sauvegarde du niveau //
-LevelEditorEngine.saveMap = function() {
+LevelEditorEngine.saveLevels = function() {
     LevelEditorEngine.operation = LevelEditorEngine.operationSave;
     var aBricks = [];
     for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
@@ -221,7 +256,8 @@ LevelEditorEngine.saveMap = function() {
         aBricks.push({x : currentBrick.x, y : currentBrick .y});
     }
     LevelEditorEngine.save = {};
-    LevelEditorEngine.save.bricks = aBricks;
+    LevelEditorEngine.save.levels = LevelEditorScreenContext.levels;
+    LevelEditorEngine.save.levels[LevelEditorScreenContext.levelIndex].bricks = aBricks;
     console.log(JSON.stringify(LevelEditorEngine.save));
     initFileSystem();
 };
@@ -241,7 +277,7 @@ function onInitFileSytem(fileSystem) {
 }
 
 function onGetDirectory(dirEntry) {
-    dirEntry.getFile('maps.json', {create: true}, onGetFile);
+    dirEntry.getFile('levels.json', {create: true}, onGetFile);
 }
 
 function onGetFile(fileEntry) {

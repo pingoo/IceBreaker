@@ -11,6 +11,9 @@ LevelEditorScreenContext = {
     
     currentAction : null,
     currentBrick : null,
+    levels : null,
+    levelIndex : 0,
+    currentLevel : null,
     
     downSpriteOrigins : null
 };
