@@ -93,6 +93,7 @@ LevelEditorEngine.updateBrick = function () {
 
 // Nettoyage du niveau de ses briques
 LevelEditorEngine.clearLevel = function() {
+    LevelEditorScreenContext.bricks.callAll('kill');
     LevelEditorScreenContext.bricks = null;
     LevelEditorScreenContext.bricks = game.add.group();
 }
@@ -207,7 +208,7 @@ LevelEditorEngine.loadBricks = function(e) {
         var brick = bricks[i];
         LevelEditorEngine.brickAction(game, brick.x, brick.y);
     }
-    LevelEditorScreenContext.currentAction = null;
+    LevelEditorScreenContext.currentAction = Constants.actionUpdate;
 };
 
 
