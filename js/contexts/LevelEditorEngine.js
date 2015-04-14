@@ -21,7 +21,7 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
         var brick = new Brick(game, posX, posY, "brick", 20); //TODO : update from selected brick
         LevelEditorScreenContext.bricks.add(brick);
         LevelEditorScreenContext.currentBrick = brick;
-    } 
+    }
 
     // supression de brique
     if(LevelEditorScreenContext.currentAction === Constants.actionDelete){
@@ -90,6 +90,13 @@ LevelEditorEngine.updateBrick = function () {
 };
 
 
+
+// Nettoyage du niveau de ses briques
+LevelEditorEngine.clearLevel = function() {
+    LevelEditorScreenContext.bricks = null;
+    LevelEditorScreenContext.bricks = game.add.group();
+}
+
 // Retour au menu
 LevelEditorEngine.backToMenuScreen = function() {
     game.state.start("menuState");
@@ -116,9 +123,11 @@ LevelEditorEngine.getInboudsPos = function(posX, posY) {
 
 // Deplacement de la position
 LevelEditorEngine.updatePosition = function(moveX, moveY) {
-    var newPosX = LevelEditorScreenContext.currentBrick.x + moveX;
-    var newPosY = LevelEditorScreenContext.currentBrick.y + moveY;
-    LevelEditorEngine.moveBrickTo(newPosX, newPosY);
+    if(LevelEditorScreenContext.currentBrick) {
+        var newPosX = LevelEditorScreenContext.currentBrick.x + moveX;
+        var newPosY = LevelEditorScreenContext.currentBrick.y + moveY;
+        LevelEditorEngine.moveBrickTo(newPosX, newPosY);
+    }
 }
 
 // Changement de la position
@@ -131,6 +140,16 @@ LevelEditorEngine.moveBrickTo = function (posX, posY) {
         // ecrire les coordonnees
         LevelEditorScreenContext.actionText.text = Texts.updateBrick;
         LevelEditorScreenContext.positionText.text = "x:" + LevelEditorScreenContext.currentBrick.x + "  y:" + LevelEditorScreenContext.currentBrick.y;
+    }
+}
+
+
+// Detection de la position au moment du click sur la sprite
+LevelEditorEngine.getSpriteOrigins = function (downX, downY) {
+    if(LevelEditorScreenContext.currentBrick) {
+        var posX = downX - LevelEditorScreenContext.currentBrick.x;
+        var posY = downY - LevelEditorScreenContext.currentBrick.y;
+        return {x : posX, y : posY};
     }
 }
 
@@ -180,12 +199,15 @@ LevelEditorEngine.loadBricks = function(e) {
     // Pour le moment un seul niveau est enregistré à la fois dans le fichier maps.json
     console.log(this.result);
 
+    LevelEditorEngine.clearLevel();
+    
     LevelEditorScreenContext.currentAction = Constants.actionCreate;
     var bricks = JSON.parse(this.result).bricks;
     for(var i = 0, bricksLength = bricks.length; i < bricksLength; i++){
         var brick = bricks[i];
         LevelEditorEngine.brickAction(game, brick.x, brick.y);
     }
+    LevelEditorScreenContext.currentAction = null;
 };
 
 

@@ -10,5 +10,7 @@ LevelEditorScreenContext = {
     actionText : null,
     
     currentAction : null,
-    currentBrick : null
+    currentBrick : null,
+    
+    downSpriteOrigins : null
 };

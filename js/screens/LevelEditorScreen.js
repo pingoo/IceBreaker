@@ -63,23 +63,28 @@ function levelEditorCreate() {
         currentButton.setVisible(false);
     }
     
-    
     game.input.onDown.add(function () {
         if(game.input.x < Constants.boundX){
             LevelEditorEngine.brickAction(game, game.input.x, game.input.y);
         }
     }, this);
-    
-    game.input.onHold.add(function () {
-
-    }, this);
 }
 
 function levelEditorUpdate() {
-    // Plutot que onHold qui ne fonctionne pas, j'utilise ce boolean
+    
+    // Plutot que onHold qui ne fonctionne pas, j'utilise ce boolean isDown
     if (game.input.activePointer.isDown) {
         if(game.input.x < Constants.boundX && LevelEditorScreenContext.currentAction === Constants.actionUpdate){
-            LevelEditorEngine.moveBrickTo(game.input.x, game.input.y);
+            if(!LevelEditorScreenContext.downSpriteOrigins){
+                var downX = game.input.activePointer.positionDown.x;
+                var downY = game.input.activePointer.positionDown.y;
+                LevelEditorScreenContext.downSpriteOrigins = LevelEditorEngine.getSpriteOrigins(downX, downY);
+            }
+            if(LevelEditorScreenContext.downSpriteOrigins){
+                LevelEditorEngine.moveBrickTo(game.input.x - LevelEditorScreenContext.downSpriteOrigins.x, game.input.y - LevelEditorScreenContext.downSpriteOrigins.y)
+            }
         }
+    } else {
+        LevelEditorScreenContext.downSpriteOrigins = null;
     }
 }
