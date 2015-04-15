@@ -12,6 +12,7 @@ LevelEditorScreenContext = {
     currentAction : null,
     currentBrick : null,
     levels : null,
+    levelButtons : [],
     levelIndex : 0,
     currentLevel : null,
     

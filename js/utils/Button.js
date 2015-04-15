@@ -24,3 +24,7 @@ Button.prototype.setVisible = function(visibility) {
     this.button.visible = visibility;
     this.text.visible = visibility;
 }
+
+Button.prototype.setTint = function(tint) {
+    this.button.tint = tint;
+}
