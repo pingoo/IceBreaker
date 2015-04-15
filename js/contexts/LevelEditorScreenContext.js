@@ -14,7 +14,6 @@ LevelEditorScreenContext = {
     levels : null,
     levelButtons : [],
     levelIndex : 0,
-    currentLevel : null,
     
     downSpriteOrigins : null
 };

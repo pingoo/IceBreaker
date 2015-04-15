@@ -20,15 +20,15 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
         LevelEditorScreenContext.positionText.text = "x:" + posX + "  y:" + posY;
         LevelEditorScreenContext.positionText.x = LevelEditorScreenContext.actionText.x + LevelEditorScreenContext.actionText.width + 10;
         var brick = new Brick(game, posX, posY, "brick", 20); //TODO : update from selected brick
-        LevelEditorScreenContext.bricks.add(brick);
+        LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.add(brick);
         LevelEditorScreenContext.currentBrick = brick;
     }
 
     // supression de brique
     if(LevelEditorScreenContext.currentAction === Constants.actionDelete){
         var brick = null;
-        for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
-          var currentBrick = LevelEditorScreenContext.bricks.children[i];
+        for (var i = 0, len = LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.children.length; i < len; i++) {
+          var currentBrick = LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.children[i];
             if(posX > currentBrick.x && posX < currentBrick.x + currentBrick.width && posY > currentBrick.y && posY < currentBrick.y + currentBrick.height){
                 brick = currentBrick;
                 break;
@@ -36,7 +36,7 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
         }
         
         if(brick) {
-            LevelEditorScreenContext.bricks.remove(brick);
+            LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.remove(brick);
             LevelEditorScreenContext.currentBrick = null;
         }
     } 
@@ -44,8 +44,8 @@ LevelEditorEngine.brickAction = function (game, posX, posY) {
     // Edition de brique
     if(LevelEditorScreenContext.currentAction === Constants.actionUpdate) {
         var brick = null;
-        for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
-          var currentBrick = LevelEditorScreenContext.bricks.children[i];
+        for (var i = 0, len = LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.children.length; i < len; i++) {
+          var currentBrick = LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.children[i];
             if(posX > currentBrick.x && posX < currentBrick.x + currentBrick.width && posY > currentBrick.y && posY < currentBrick.y + currentBrick.height){
                 brick = currentBrick;
                 break;
@@ -91,12 +91,32 @@ LevelEditorEngine.updateBrick = function () {
 };
 
 
+// Nettoyage des boutons au chargement
+LevelEditorEngine.clearButtonsLevel = function() {
+    // on destroy tout ça
+    if(LevelEditorScreenContext.levelButtons){
+        for (var i = 0, len = LevelEditorScreenContext.levelButtons.length; i < len; i++) {
+            var currentButton = LevelEditorScreenContext.levelButtons[i];
+            currentButton.destroy();
+        }
+        LevelEditorScreenContext.levelButtons = [];
+    }
+}
+
 
 // Nettoyage du niveau de ses briques
 LevelEditorEngine.clearLevel = function() {
-    LevelEditorScreenContext.bricks.callAll('kill');
-    LevelEditorScreenContext.bricks = null;
-    LevelEditorScreenContext.bricks = game.add.group();
+    // on cache juste les briques
+    if(LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex] && LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks) {
+        LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.callAll('kill');
+    }
+}
+
+LevelEditorEngine.showBricksLevel = function() {
+    // on cache juste les briques
+    if(LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex] && LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks){
+        LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].bricks.callAll('revive');
+    }
 }
 
 // Retour au menu
@@ -205,10 +225,10 @@ LevelEditorEngine.addNewLevel = function() {
 
 
 LevelEditorEngine.addLevel = function(name) {
-    LevelEditorScreenContext.currentLevel = {};
-    LevelEditorScreenContext.currentLevel.name = name;
-    LevelEditorScreenContext.currentLevel.bricks = [];
-    LevelEditorScreenContext.levels.push(LevelEditorScreenContext.currentLevel);
+    var newLevel = {};
+    newLevel.name = name;
+    newLevel.bricks = game.add.group();
+    LevelEditorScreenContext.levels.push(newLevel);
     LevelEditorEngine.addLevelButtonSelector();
 };
 
@@ -225,6 +245,9 @@ LevelEditorEngine.addLevelButtonSelector = function() {
 
 // Action du click depuis un bouton sur le niveau choisi
 LevelEditorEngine.changeLevel = function(levelNumber) {
+    // Avant toute chose
+    LevelEditorEngine.clearLevel();
+    
     var index = levelNumber - 1;
     for (var i = 0, len = LevelEditorScreenContext.levelButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.levelButtons[i];
@@ -232,9 +255,7 @@ LevelEditorEngine.changeLevel = function(levelNumber) {
     }
     LevelEditorScreenContext.levelButtons[index].setTint(0xF44336);
     LevelEditorScreenContext.levelIndex = index;
-    
-    LevelEditorEngine.clearLevel();
-    
+    LevelEditorEngine.showBricksLevel();
 }
 
 // Chargement des niveaux //
@@ -251,22 +272,26 @@ LevelEditorEngine.createLevels = function(e) {
 
     // 1- on enlève les eventuelles bricks déjà présentes et on vide les niveaux
     LevelEditorEngine.clearLevel();
+    LevelEditorEngine.clearButtonsLevel();
     LevelEditorScreenContext.levels = [];
     LevelEditorScreenContext.levelButtons = [];
     
     // 2 - on réccupère l'objet de la sauvegarde
     var levels = JSON.parse(this.result).levels;
-    LevelEditorScreenContext.levelIndex = 0;
 
     // 3 - on réccupère les infos
-    var level = levels[LevelEditorScreenContext.levelIndex];
-    var bricks = level.bricks;
-    var name = level.name;
+    for(var i = 0, levelsLength = levels.length; i < levelsLength; i++) {
+        LevelEditorScreenContext.levelIndex = i;
+        var level = levels[i];
+        var bricks = level.bricks;
+        var name = level.name;
+        
+        // 4 - on définit le nom et on replace les briques
+        LevelEditorEngine.addLevel(name);
+        LevelEditorEngine.createBricks(bricks);
+    }
     
-    // 4 - on définit le nom et on replace les briques
-    LevelEditorEngine.addLevel(name);
-    LevelEditorEngine.createBricks(bricks);
-    
+    LevelEditorEngine.changeLevel(1);
     LevelEditorScreenContext.currentAction = Constants.actionUpdate;
 };
 
@@ -280,17 +305,28 @@ LevelEditorEngine.createBricks = function(bricks) {
 }
 
 
-// Sauvegarde du niveau //
+// Sauvegarde des niveaux //
 LevelEditorEngine.saveLevels = function() {
     LevelEditorEngine.operation = LevelEditorEngine.operationSave;
-    var aBricks = [];
-    for (var i = 0, len = LevelEditorScreenContext.bricks.children.length; i < len; i++) {
-        var currentBrick = LevelEditorScreenContext.bricks.children[i];
-        aBricks.push({x : currentBrick.x, y : currentBrick .y});
-    }
+    
     LevelEditorEngine.save = {};
-    LevelEditorEngine.save.levels = LevelEditorScreenContext.levels;
-    LevelEditorEngine.save.levels[LevelEditorScreenContext.levelIndex].bricks = aBricks;
+    LevelEditorEngine.save.levels = [];
+    
+    var aBricks = [];
+
+    for (var i = 0, len = LevelEditorScreenContext.levels.length; i < len; i++) {
+        var currentLevel = LevelEditorScreenContext.levels[i];
+        aBricks = [];
+        for (var j = 0, lenB = currentLevel.bricks.children.length; j < lenB; j++) {
+            var currentBrick = currentLevel.bricks.children[j];
+            aBricks.push({x : currentBrick.x, y : currentBrick .y});
+        }
+        
+        LevelEditorEngine.save.levels[i] = {};
+        LevelEditorEngine.save.levels[i].name = currentLevel.name;
+        LevelEditorEngine.save.levels[i].bricks = aBricks;
+    }
+
     console.log(JSON.stringify(LevelEditorEngine.save));
     initFileSystem();
 };
