@@ -6,7 +6,8 @@ LevelEditorEngine = {
     operation : null,
     
     operationLoad : "LOAD",
-    operationSave : "SAVE"
+    operationSave : "SAVE",
+    oldFileRemoved : false
 };
 
 LevelEditorEngine.brickAction = function (game, posX, posY) {
@@ -225,13 +226,15 @@ LevelEditorEngine.addLevelButtonSelector = function() {
 // Action du click depuis un bouton sur le niveau choisi
 LevelEditorEngine.changeLevel = function(levelNumber) {
     var index = levelNumber - 1;
-    console.log("index="+index);
     for (var i = 0, len = LevelEditorScreenContext.levelButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.levelButtons[i];
         currentButton.setTint(0xFFFFFF);
     }
     LevelEditorScreenContext.levelButtons[index].setTint(0xF44336);
     LevelEditorScreenContext.levelIndex = index;
+    
+    LevelEditorEngine.clearLevel();
+    
 }
 
 // Chargement des niveaux //
@@ -241,8 +244,8 @@ LevelEditorEngine.loadLevels = function() {
 };
 
 
-// Chargement d'un niveau //
-LevelEditorEngine.loadBricks = function(e) {
+// Creation des niveaux //
+LevelEditorEngine.createLevels = function(e) {
     // this.result est le résultat du chargement de la sauvegarde
     console.log(this.result);
 
@@ -251,27 +254,30 @@ LevelEditorEngine.loadBricks = function(e) {
     LevelEditorScreenContext.levels = [];
     LevelEditorScreenContext.levelButtons = [];
     
-    // 2- on passe ne mode création de brique
-    LevelEditorScreenContext.currentAction = Constants.actionCreate;
-    
-    // 3 - on réccupère l'objet de la sauvegarde
+    // 2 - on réccupère l'objet de la sauvegarde
     var levels = JSON.parse(this.result).levels;
     LevelEditorScreenContext.levelIndex = 0;
 
-    // 4 - on réccupère les infos
+    // 3 - on réccupère les infos
     var level = levels[LevelEditorScreenContext.levelIndex];
     var bricks = level.bricks;
     var name = level.name;
     
-    // 5 - on définit le nom et on replace les briques
+    // 4 - on définit le nom et on replace les briques
     LevelEditorEngine.addLevel(name);
+    LevelEditorEngine.createBricks(bricks);
+    
+    LevelEditorScreenContext.currentAction = Constants.actionUpdate;
+};
+
+// Creation des briques d'un niveau depuis une liste
+LevelEditorEngine.createBricks = function(bricks) {
+    LevelEditorScreenContext.currentAction = Constants.actionCreate;
     for(var i = 0, bricksLength = bricks.length; i < bricksLength; i++){
         var brick = bricks[i];
         LevelEditorEngine.brickAction(game, brick.x, brick.y);
     }
-    
-    LevelEditorScreenContext.currentAction = Constants.actionUpdate;
-};
+}
 
 
 // Sauvegarde du niveau //
@@ -299,7 +305,6 @@ function initFileSystem() {
 }
 
 function onInitFileSytem(fileSystem) {
-    console.log("Opened file system: " + fileSystem.name);
     fileSystem.root.getDirectory("data", {create: true}, onGetDirectory);
 }
 
@@ -309,7 +314,15 @@ function onGetDirectory(dirEntry) {
 
 function onGetFile(fileEntry) {
     if(LevelEditorEngine.operation === LevelEditorEngine.operationSave){
-        fileEntry.createWriter(onWriterReady, errorHandler);
+        if(!LevelEditorEngine.oldFileRemoved){
+            fileEntry.remove(function() {
+                LevelEditorEngine.oldFileRemoved = true;
+                LevelEditorEngine.saveLevels();
+            }, errorHandler);
+        } else {
+            fileEntry.createWriter(onWriterReady, errorHandler);
+            LevelEditorEngine.oldFileRemoved = false;
+        }
     }
     
     if(LevelEditorEngine.operation === LevelEditorEngine.operationLoad){
@@ -324,7 +337,7 @@ function onWriterReady(fileWriter) {
 
 function onFileReady(fileEntry) {
     var reader = new FileReader();
-    reader.onloadend = LevelEditorEngine.loadBricks;    
+    reader.onloadend = LevelEditorEngine.createLevels;
     reader.readAsText(fileEntry); 
 }
 
