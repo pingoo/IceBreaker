@@ -13,12 +13,12 @@ function Button(game, text, posX, posY, scale, buttonSheet, fnCallback, style) {
     this.text.anchor.x = 0.5;
     this.text.anchor.y = 0.5;
     this.button.scale.setTo(scale, scale);
-    if(!isNaN(this.text.width) && !isNaN(this.text.fontSize) && !isNaN(this.button.width)) {
+    if (!isNaN(this.text.width) && !isNaN(this.text.fontSize) && !isNaN(this.button.width)) {
         while(this.text.width > this.button.width - 20) {
             this.text.fontSize--;
         }
     }
-};
+}
 
 Button.prototype.setVisible = function(visibility) {
     this.button.visible = visibility;
@@ -32,4 +32,11 @@ Button.prototype.setTint = function(tint) {
 Button.prototype.destroy = function() {
     this.button.destroy();
     this.text.destroy();
+};
+
+Button.prototype.setPosition = function(posX, posY) {
+    this.text.x = posX;
+    this.text.y = posY;
+    this.button.x = posX;
+    this.button.y = posY;
 };

@@ -23,6 +23,8 @@ function levelEditorCreate() {
     LevelEditorScreenContext.positionText = game.add.text(700, 14, '--', { font: "14px Arial", fill: "#0099CC", align: "left" });
     LevelEditorScreenContext.actionText = game.add.text(630, 14, "--", { font: "14px Arial", fill: "#0099CC", align: "left" });
     
+    LevelEditorScreenContext.levelNameText = game.add.text(20, 580, "--", { font: "14px Arial", fill: "#0099CC", align: "left" });
+    
     //Boutons de CRUD
     new Button(game, Texts.createBrick, 700, 60, 0.5, 'button', LevelEditorEngine.createBrick);
     
@@ -31,13 +33,17 @@ function levelEditorCreate() {
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
     
     //Boutons gestion
-    new Button(game, Texts.addLevel, 700, 410, 0.5, 'button', LevelEditorEngine.addNewLevel);
+    var buttonScale = 0.45;
+        LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.renameLevel, 20, 580, buttonScale, 'button', LevelEditorEngine.renameLevel));
     
-    new Button(game, Texts.loadLevels, 700, 460, 0.5, 'button', LevelEditorEngine.loadLevels);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.addLevel, 700, 410, buttonScale, 'button', LevelEditorEngine.addNewLevel));
     
-    new Button(game, Texts.saveLevels, 700, 510, 0.5, 'button', LevelEditorEngine.saveLevels);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.loadLevels, 700, 460, buttonScale, 'button', LevelEditorEngine.loadLevels));
     
-    new Button(game, Texts.backToMenu, 700, 560, 0.5, 'button', LevelEditorEngine.backToMenuScreen);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.saveLevels, 700, 510, buttonScale, 'button', LevelEditorEngine.saveLevels));
+    
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.backToMenu, 700, 560, buttonScale, 'button', LevelEditorEngine.backToMenuScreen));
+    
     
     //Boutons d'edition de position
     var buttonFiveTop = new Button(game, Texts.five, 680, 200, 0.2, 'button', LevelEditorEngine.fiveTop);
