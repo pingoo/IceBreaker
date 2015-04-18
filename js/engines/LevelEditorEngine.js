@@ -227,8 +227,13 @@ LevelEditorEngine.addNewLevel = function() {
 LevelEditorEngine.renameLevel = function() {
     var newName = window.prompt(Texts.newLevelTitle, Texts.newLevelText);
     LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].name = newName;
-    //LevelEditorScreenContext.levelNameText.text = "-- " + newName + " --";
-    LevelEditorEngine.changeLevel(LevelEditorEngine.levelIndex);
+    LevelEditorScreenContext.levelNameText.text = "-- " + newName + " --";
+    var lastButtonPosX = LevelEditorScreenContext.levelNameText.x + LevelEditorScreenContext.levelNameText.width + 60;
+    for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
+        var currentButton = LevelEditorScreenContext.editorButtons[i];
+        currentButton.setPosition(lastButtonPosX, 588);
+        lastButtonPosX += currentButton.button.width + 2;
+    }
 }
 
 LevelEditorEngine.addLevel = function(name) {
