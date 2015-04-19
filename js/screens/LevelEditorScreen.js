@@ -33,8 +33,9 @@ function levelEditorCreate() {
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
     
     //Boutons gestion
+    LevelEditorScreenContext.editorButtons = [];
     var buttonScale = 0.45;
-        LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.renameLevel, 20, 580, buttonScale, 'button', LevelEditorEngine.renameLevel));
+        LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.renameLevel, -100, 580, buttonScale, 'button', LevelEditorEngine.renameLevel));
     LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.addLevel, 700, 410, buttonScale, 'button', LevelEditorEngine.addNewLevel));

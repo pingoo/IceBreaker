@@ -212,14 +212,16 @@ LevelEditorEngine.oneBottom = function () {
 // Préparation de la structure des niveaux
 LevelEditorEngine.instanciateLevels = function() {
     LevelEditorScreenContext.levels = [];
-    LevelEditorEngine.addNewLevel();
+    LevelEditorEngine.addNewLevel(true);
 };
 
 // Ajout d'un niveau
-LevelEditorEngine.addNewLevel = function() {
+LevelEditorEngine.addNewLevel = function(fromMainMenu) {
     var name = window.prompt(Texts.newLevelTitle, Texts.newLevelText);
     if(name) {
         LevelEditorEngine.addLevel(name);
+    } else if(fromMainMenu === true){
+        LevelEditorEngine.backToMenuScreen();
     }
 };
 
@@ -270,7 +272,7 @@ LevelEditorEngine.changeLevel = function(levelNumber) {
     LevelEditorEngine.showBricksLevel();
     LevelEditorScreenContext.levelNameText.text = "-- " + LevelEditorScreenContext.levels[index].name + " --";
     var lastButtonPosX = LevelEditorScreenContext.levelNameText.x + LevelEditorScreenContext.levelNameText.width + 60;
-        for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
+    for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.editorButtons[i];
         currentButton.setPosition(lastButtonPosX, 588);
         lastButtonPosX += currentButton.unscalledWith + 2;
