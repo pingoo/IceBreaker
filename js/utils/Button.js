@@ -1,15 +1,15 @@
 function Button(game, text, posX, posY, scale, buttonSheet, fnCallback, style) {
     this.screen = screen;
-    this.text = text;
+    this.textMsg = text;
     this.posX = posX;
     this.posY = posY;
+    this.initialScale = scale;
 
     var style = { font: "32px Arial", align: "center" };
     
     this.button = game.add.button(posX, posY, buttonSheet, fnCallback, this, 1, 0);
     this.button.anchor.setTo(0.5, 0.5);
-    
-    this.text = game.add.text(posX, posY, text, style);
+    this.text = game.add.text(posX, posY, this.textMsg, style);
     this.text.anchor.x = 0.5;
     this.text.anchor.y = 0.5;
     this.button.scale.setTo(scale, scale);
@@ -18,6 +18,7 @@ function Button(game, text, posX, posY, scale, buttonSheet, fnCallback, style) {
             this.text.fontSize--;
         }
     }
+    this.unscalledWith = this.button.width;
 }
 
 Button.prototype.setVisible = function(visibility) {
@@ -40,3 +41,22 @@ Button.prototype.setPosition = function(posX, posY) {
     this.button.x = posX;
     this.button.y = posY;
 };
+
+Button.prototype.addZoomEffect = function(game) {
+    this.button.events.onInputOver.add(function() {
+        this.button.bringToTop();
+        game.world.bringToTop(this.text);
+        var zoomInButton = game.add.tween(this.button.scale);
+        zoomInButton.to({x : 0.75, y : 0.75}, 500, Phaser.Easing.Back.Out, true, 10);
+        var zoomInText = game.add.tween(this.text.scale);
+        zoomInText.to({x : 1.5, y : 1.5}, 500, Phaser.Easing.Back.Out, true, 10);
+    }, this);
+    
+    this.button.events.onInputOut.add(function() {
+        var zoomInButton = game.add.tween(this.button.scale);
+        zoomInButton.to({x : this.initialScale, y : this.initialScale}, 500, Phaser.Easing.Back.Out, true, 10);
+        var zoomInText = game.add.tween(this.text.scale);
+        zoomInText.to({x : 1, y : 1}, 500, Phaser.Easing.Back.Out, true, 10);
+    }, this);
+}
+

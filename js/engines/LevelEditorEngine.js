@@ -232,7 +232,7 @@ LevelEditorEngine.renameLevel = function() {
     for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.editorButtons[i];
         currentButton.setPosition(lastButtonPosX, 588);
-        lastButtonPosX += currentButton.button.width + 2;
+        lastButtonPosX += currentButton.unscalledWith + 2;
     }
 }
 
@@ -273,7 +273,7 @@ LevelEditorEngine.changeLevel = function(levelNumber) {
         for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
         var currentButton = LevelEditorScreenContext.editorButtons[i];
         currentButton.setPosition(lastButtonPosX, 588);
-        lastButtonPosX += currentButton.button.width + 2;
+        lastButtonPosX += currentButton.unscalledWith + 2;
     }
 }
 

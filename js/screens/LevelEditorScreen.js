@@ -35,14 +35,19 @@ function levelEditorCreate() {
     //Boutons gestion
     var buttonScale = 0.45;
         LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.renameLevel, 20, 580, buttonScale, 'button', LevelEditorEngine.renameLevel));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.addLevel, 700, 410, buttonScale, 'button', LevelEditorEngine.addNewLevel));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.loadLevels, 700, 460, buttonScale, 'button', LevelEditorEngine.loadLevels));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.saveLevels, 700, 510, buttonScale, 'button', LevelEditorEngine.saveLevels));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.backToMenu, 700, 560, buttonScale, 'button', LevelEditorEngine.backToMenuScreen));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
     
     //Boutons d'edition de position
