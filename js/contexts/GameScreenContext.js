@@ -7,6 +7,7 @@ GameScreenContext = {
     ball : null,
     balls : null,
     bricks : null,
+    unbreakableBricks : null,
     impact : null,
     tweenBallRotation : null,
     

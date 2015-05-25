@@ -16,14 +16,23 @@ function gameCreate() {
 
     // Creation d'un groupe 'bricks', tous les membres de ce groupe auront un body
     GameScreenContext.bricks = game.add.group();
-    //GameEngine.bricks.classType = Brick; // On definit le type du groupe sur la classe étendue crée par nos soins
+    //GameEngine.bricks.classType = BaseBrick; // On definit le type du groupe sur la classe étendue crée par nos soins
 
-    var tints = [ 0xFFFFFF, 0xFF0000, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF ];
+    // Creation d'un groupe 'bricks', tous les membres de ce groupe auront un body
+    GameScreenContext.unbreakableBricks = game.add.group();
+    //GameEngine.unbreakableBricks.classType = UnbreakableBrick; // On definit le type du groupe sur la classe étendue crée par nos soins
+
+    // Remplissage basique d'un tableau aléatoire
     for (var y = 0; y < 4; y++) {
         for (var x = 0; x < 11; x++) {
-            var brick = new Brick(game, 120 + (x * 36), 100 + (y * 52), 'brick', Constants.brickScore);
-            brick.tint = tints[(x + y) % tints.length];
-            GameScreenContext.bricks.add(brick);
+            var brickChoice = game.rnd.pick([0, 1, 1, 1, 1, 2, 2, 2, 3, 3]);
+            //var brickChoice = game.rnd.integerInRange(0, 3);
+            var newBrick = buildNewBrick(game, 120 + (x * 36), 100 + (y * 52), brickChoice);
+            if (!newBrick.isBreakable()) {
+                GameScreenContext.unbreakableBricks.add(newBrick);
+            } else {
+                GameScreenContext.bricks.add(newBrick);
+            }
         }
     }
     

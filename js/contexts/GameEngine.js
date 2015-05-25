@@ -175,6 +175,8 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
         
         game.physics.arcade.collide(ball, GameScreenContext.bricks, GameEngine.ballHitBrick, null, this);
         
+        game.physics.arcade.collide(ball, GameScreenContext.unbreakableBricks, GameEngine.ballHitBrick, null, this);
+        
         game.physics.arcade.overlap(ball, GameScreenContext.paddle, GameEngine.ballOverlapPaddle, null, this);
     }
 

@@ -7,6 +7,11 @@ function menuPreload() {
     
     game.load.image('bgGameScreen', 'assets/images/bgGameScreen.png');
     game.load.image('brick', 'assets/images/brick.png');
+    game.load.image('brickWall', 'assets/images/brickWall.jpg');
+    game.load.image('brickSimple', 'assets/images/brickSimple.png');
+    game.load.image('brick3Shot_1', 'assets/images/brick3Shot_1.png');
+    game.load.image('brick3Shot_2', 'assets/images/brick3Shot_2.png');
+    game.load.image('brick3Shot_3', 'assets/images/brick3Shot_3.png');
     game.load.image('ball', 'assets/images/ball.png');
     game.load.image('paddle', 'assets/images/paddle.png');
     game.load.image('impact', 'assets/images/impact.png');
