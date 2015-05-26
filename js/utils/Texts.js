@@ -19,6 +19,7 @@ Texts = {
     updateBrick : "Modifier",
     addLevel : "Ajouter niveau",
     newLevelTitle : "Choix du nom",
+    renameLevel : "Renomer niveau",
     newLevelText : "Choisissez un nom pour votre niveau",
     loadLevels : "Charger",
     saveLevels : "Sauvegarder",

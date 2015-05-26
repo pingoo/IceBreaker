@@ -221,20 +221,34 @@ LevelEditorEngine.oneBottom = function () {
 };
 
 
-// préparation de la structure des niveaux
+// Préparation de la structure des niveaux
 LevelEditorEngine.instanciateLevels = function() {
     LevelEditorScreenContext.levels = [];
-    LevelEditorEngine.addNewLevel();
+    LevelEditorEngine.addNewLevel(true);
 };
 
 // Ajout d'un niveau
-LevelEditorEngine.addNewLevel = function() {
+LevelEditorEngine.addNewLevel = function(fromMainMenu) {
     var name = window.prompt(Texts.newLevelTitle, Texts.newLevelText);
     if(name) {
         LevelEditorEngine.addLevel(name);
+    } else if(fromMainMenu === true){
+        LevelEditorEngine.backToMenuScreen();
     }
 };
 
+// Renomer un niveau
+LevelEditorEngine.renameLevel = function() {
+    var newName = window.prompt(Texts.newLevelTitle, Texts.newLevelText);
+    LevelEditorScreenContext.levels[LevelEditorScreenContext.levelIndex].name = newName;
+    LevelEditorScreenContext.levelNameText.text = "-- " + newName + " --";
+    var lastButtonPosX = LevelEditorScreenContext.levelNameText.x + LevelEditorScreenContext.levelNameText.width + 60;
+    for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
+        var currentButton = LevelEditorScreenContext.editorButtons[i];
+        currentButton.setPosition(lastButtonPosX, 588);
+        lastButtonPosX += currentButton.unscalledWith + 2;
+    }
+}
 
 LevelEditorEngine.addLevel = function(name) {
     var newLevel = {};
@@ -247,7 +261,7 @@ LevelEditorEngine.addLevel = function(name) {
 // Crée un bouton pour sélectionner le niveau
 LevelEditorEngine.addLevelButtonSelector = function() {
     var levelNumber = LevelEditorScreenContext.levels.length;
-    var newButton = new Button(game, "-" + levelNumber + "-", 600 + 34 * levelNumber, 320, 0.2, 'button', function(){
+    var newButton = new Button(game, "-" + levelNumber + "-", 34 * levelNumber, 540, 0.2, 'button', function(){
         LevelEditorEngine.changeLevel(levelNumber);
     });
     
@@ -268,6 +282,13 @@ LevelEditorEngine.changeLevel = function(levelNumber) {
     LevelEditorScreenContext.levelButtons[index].setTint(0xF44336);
     LevelEditorScreenContext.levelIndex = index;
     LevelEditorEngine.showBricksLevel();
+    LevelEditorScreenContext.levelNameText.text = "-- " + LevelEditorScreenContext.levels[index].name + " --";
+    var lastButtonPosX = LevelEditorScreenContext.levelNameText.x + LevelEditorScreenContext.levelNameText.width + 60;
+    for (var i = 0, len = LevelEditorScreenContext.editorButtons.length; i < len; i++) {
+        var currentButton = LevelEditorScreenContext.editorButtons[i];
+        currentButton.setPosition(lastButtonPosX, 588);
+        lastButtonPosX += currentButton.unscalledWith + 2;
+    }
 }
 
 // Chargement des niveaux //

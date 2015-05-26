@@ -11,7 +11,7 @@ function Ball(game, posX, posY, spriteName) {   // Définition du constructeur d
     this.checkWorldBounds = true; // TODO : mettre à false plus tard
 
     this.body.collideWorldBounds = true;
-    var bounceFactor = 1.03;
+    var bounceFactor = 1.02;
     this.body.bounce.setTo(bounceFactor, bounceFactor);
 
     // Fonction appelée à la sortie de la balle de l'écran

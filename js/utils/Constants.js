@@ -14,6 +14,7 @@ Constants = {
     
     // Vélocité verticale initiale
     ballInitialVelocityY : -300,
+    ballMaxVelocityY : 500,
     // Vitesse angulaire
     ballAngularSpeed : 0.2,
     

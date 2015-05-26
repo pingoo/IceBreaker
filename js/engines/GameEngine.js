@@ -122,7 +122,9 @@ GameEngine.ballHitPaddle = function (ballSprite, paddleSprite) {
 
 GameEngine.ballOverlapPaddle = function (ballSprite, paddleSprite) {
     // On change la vélocité Y de la balle pour qu'elle reparte vers le haut
-    ballSprite.body.velocity.y = Constants.ballInitialVelocityY;
+    if(ballSprite.body.velocity.y > 0) {
+        ballSprite.body.velocity.y = -ballSprite.body.velocity.y;
+    }
     GameEngine.showImpact(ballSprite);
 };
 
@@ -168,6 +170,10 @@ GameEngine.update = function(posX, game) { // Déclaration d'une fonction de mou
 
     GameScreenContext.paddle.x = Phaser.Math.clamp(GameScreenContext.paddle.x, 24, game.width - 24);
 
+    if(ball.body.velocity.y > Constants.ballMaxVelocityY) {
+        ball.body.velocity.y = Constants.ballMaxVelocityY;
+    }
+    
     if (GameEngine.ballOnPaddle) {
         ball.body.x = GameScreenContext.paddle.x - 8;
     } else {

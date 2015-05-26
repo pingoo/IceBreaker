@@ -11,3 +11,7 @@ Tools.calcAngle = function (velocityX, velocityY) {
 Tools.sign = function (x) {
     return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
 };
+
+Array.prototype.last = function() {
+    return this[this.length-1];
+}

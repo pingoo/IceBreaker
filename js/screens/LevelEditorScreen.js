@@ -23,6 +23,8 @@ function levelEditorCreate() {
     LevelEditorScreenContext.positionText = game.add.text(700, 14, '--', { font: "14px Arial", fill: "#0099CC", align: "left" });
     LevelEditorScreenContext.actionText = game.add.text(630, 14, Texts.createBrick, { font: "14px Arial", fill: "#0099CC", align: "left" });
     
+    LevelEditorScreenContext.levelNameText = game.add.text(20, 580, "--", { font: "14px Arial", fill: "#0099CC", align: "left" });
+    
     //Boutons de CRUD
     new Button(game, Texts.createBrick, 700, 60, 0.5, 'button', LevelEditorEngine.createBrick);
     
@@ -48,13 +50,23 @@ function levelEditorCreate() {
     LevelEditorScreenContext.brickTypeButtons.push(brick3ShotsButton);
     
     //Boutons gestion
-    new Button(game, Texts.addLevel, 700, 410, 0.5, 'button', LevelEditorEngine.addNewLevel);
+    LevelEditorScreenContext.editorButtons = [];
+    var buttonScale = 0.45;
+        LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.renameLevel, -100, 580, buttonScale, 'button', LevelEditorEngine.renameLevel));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
-    new Button(game, Texts.loadLevels, 700, 460, 0.5, 'button', LevelEditorEngine.loadLevels);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.addLevel, 700, 410, buttonScale, 'button', LevelEditorEngine.addNewLevel));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
-    new Button(game, Texts.saveLevels, 700, 510, 0.5, 'button', LevelEditorEngine.saveLevels);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.loadLevels, 700, 460, buttonScale, 'button', LevelEditorEngine.loadLevels));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
     
-    new Button(game, Texts.backToMenu, 700, 560, 0.5, 'button', LevelEditorEngine.backToMenuScreen);
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.saveLevels, 700, 510, buttonScale, 'button', LevelEditorEngine.saveLevels));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
+    
+    LevelEditorScreenContext.editorButtons.push(new Button(game, Texts.backToMenu, 700, 560, buttonScale, 'button', LevelEditorEngine.backToMenuScreen));
+    LevelEditorScreenContext.editorButtons.last().addZoomEffect(game);
+    
     
     //Boutons d'edition de position
     var buttonFiveTop = new Button(game, Texts.five, 680, 200, 0.2, 'button', LevelEditorEngine.fiveTop);
