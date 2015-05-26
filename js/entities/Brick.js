@@ -85,7 +85,7 @@ function SimpleBrick(game, posX, posY, life) {
     
     life = (life == null) || (life < 1) ? 1 : (life > 3 ? 3 : life);
     spriteNames = life == 1 ? ['brickSimple'] : ['brick3Shot_1', 'brick3Shot_2', 'brick3Shot_3'].splice(0, life);
-    brickType = [BrickType.SIMPLE, BrickType.TWO_SHOTS, BrickType.THREE_SHOTS][life - 1];
+    brickType = life; //[BrickType.SIMPLE, BrickType.TWO_SHOTS, BrickType.THREE_SHOTS][life - 1];
     BaseBrick.call(this, game, posX, posY, spriteNames, life, 0xFFFFFF, brickType);
 }
 
