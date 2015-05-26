@@ -21,7 +21,7 @@ function levelEditorCreate() {
     LevelEditorScreenContext.ball.y = LevelEditorScreenContext.paddle.y - 16;
     
     LevelEditorScreenContext.positionText = game.add.text(700, 14, '--', { font: "14px Arial", fill: "#0099CC", align: "left" });
-    LevelEditorScreenContext.actionText = game.add.text(630, 14, "--", { font: "14px Arial", fill: "#0099CC", align: "left" });
+    LevelEditorScreenContext.actionText = game.add.text(630, 14, Texts.createBrick, { font: "14px Arial", fill: "#0099CC", align: "left" });
     
     //Boutons de CRUD
     new Button(game, Texts.createBrick, 700, 60, 0.5, 'button', LevelEditorEngine.createBrick);
@@ -29,6 +29,23 @@ function levelEditorCreate() {
     new Button(game, Texts.deleteBrick, 700, 110, 0.5, 'button', LevelEditorEngine.deleteBrick);
     
     new Button(game, Texts.updateBrick, 700, 160, 0.5, 'button', LevelEditorEngine.updateBrick);
+    
+    //Boutons type de brick
+    var brickWallButton = new Button(game, null, 775, 60, 1, 'brickWall', LevelEditorEngine.changeBrickType);
+    brickWallButton.brickType = BrickType.UNBREAKABLE;
+    LevelEditorScreenContext.brickTypeButtons.push(brickWallButton);
+
+    var brickSimpleButton = new Button(game, null, 775, 85, 1, 'brickSimple', LevelEditorEngine.changeBrickType);
+    brickSimpleButton.brickType = BrickType.SIMPLE;
+    LevelEditorScreenContext.brickTypeButtons.push(brickSimpleButton);
+
+    var brick2ShotsButton = new Button(game, null, 775, 110, 1, 'brick3Shot_2', LevelEditorEngine.changeBrickType);
+    brick2ShotsButton.brickType = BrickType.TWO_SHOTS;
+    LevelEditorScreenContext.brickTypeButtons.push(brick2ShotsButton);
+
+    var brick3ShotsButton = new Button(game, null, 775, 135, 1, 'brick3Shot_3', LevelEditorEngine.changeBrickType);
+    brick3ShotsButton.brickType = BrickType.THREE_SHOTS;
+    LevelEditorScreenContext.brickTypeButtons.push(brick3ShotsButton);
     
     //Boutons gestion
     new Button(game, Texts.addLevel, 700, 410, 0.5, 'button', LevelEditorEngine.addNewLevel);
@@ -68,7 +85,7 @@ function levelEditorCreate() {
     
     game.input.onDown.add(function () {
         if(game.input.x < Constants.boundX){
-            LevelEditorEngine.brickAction(game, game.input.x, game.input.y);
+            LevelEditorEngine.brickAction(game, game.input.x, game.input.y, LevelEditorScreenContext.currentBrickType);
         }
     }, this);
     

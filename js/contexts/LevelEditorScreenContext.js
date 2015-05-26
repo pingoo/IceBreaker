@@ -5,11 +5,13 @@ LevelEditorScreenContext = {
     backGround : null,
     bricks : null,
     updateButtons : null,
+    brickTypeButtons : [],
 
     positionText : null,
     actionText : null,
     
-    currentAction : null,
+    currentAction : Constants.actionCreate,
+    currentBrickType : BrickType.SIMPLE,
     currentBrick : null,
     levels : null,
     levelButtons : [],
