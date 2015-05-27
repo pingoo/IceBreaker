@@ -35,6 +35,7 @@ function levelEditorCreate() {
     //Boutons type de brick
     var brickWallButton = new Button(game, null, 775, 60, 1, 'brickWall', LevelEditorEngine.changeBrickType);
     brickWallButton.brickType = BrickType.UNBREAKABLE;
+    brickWallButton.setTint(0x666666);
     LevelEditorScreenContext.brickTypeButtons.push(brickWallButton);
 
     var brickSimpleButton = new Button(game, null, 775, 85, 1, 'brickSimple', LevelEditorEngine.changeBrickType);
@@ -43,10 +44,12 @@ function levelEditorCreate() {
 
     var brick2ShotsButton = new Button(game, null, 775, 110, 1, 'brick3Shot_2', LevelEditorEngine.changeBrickType);
     brick2ShotsButton.brickType = BrickType.TWO_SHOTS;
+    brick2ShotsButton.setTint(0x666666);
     LevelEditorScreenContext.brickTypeButtons.push(brick2ShotsButton);
 
     var brick3ShotsButton = new Button(game, null, 775, 135, 1, 'brick3Shot_3', LevelEditorEngine.changeBrickType);
     brick3ShotsButton.brickType = BrickType.THREE_SHOTS;
+    brick3ShotsButton.setTint(0x666666);
     LevelEditorScreenContext.brickTypeButtons.push(brick3ShotsButton);
     
     //Boutons gestion

@@ -101,6 +101,11 @@ LevelEditorEngine.showBrickTypeButtons = function (trueToShow) {
 // Changement de type de brique à ajouter
 LevelEditorEngine.changeBrickType = function(button) {
     LevelEditorScreenContext.currentBrickType = button.parentButton.brickType;
+    for (var i = 0, len = LevelEditorScreenContext.brickTypeButtons.length; i < len; i++) {
+        var currentButton = LevelEditorScreenContext.brickTypeButtons[i];
+        var tint = currentButton.brickType == button.parentButton.brickType ? 0xFFFFFF : 0x666666;
+        currentButton.setTint(tint);
+    }
 };
 
 // Nettoyage des boutons au chargement
